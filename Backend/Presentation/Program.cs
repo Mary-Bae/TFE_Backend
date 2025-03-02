@@ -33,8 +33,8 @@ namespace Presentation
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(auth =>
                 {
-                    auth.Authority = builder.Configuration["Auth0:Domain"];
-                    auth.Audience = builder.Configuration["Audience:Audience"];
+                    auth.Authority = $"https://{builder.Configuration["Auth0:Domain"]}";
+                    auth.Audience = builder.Configuration["Auth0:Audience"];
                     auth.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                     {
                         NameClaimType = ClaimTypes.NameIdentifier
@@ -51,8 +51,9 @@ namespace Presentation
                 app.UseSwaggerUI();
             }
             app.UseHttpsRedirection();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+            
             app.MapControllers();
 
             app.Run();
