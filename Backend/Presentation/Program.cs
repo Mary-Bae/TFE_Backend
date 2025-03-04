@@ -40,6 +40,12 @@ namespace Presentation
                         NameClaimType = ClaimTypes.NameIdentifier
                     };
                 });
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("employee", policy => policy.RequireClaim("permissions", "employee"));
+                options.AddPolicy("administrator", policy => policy.RequireClaim("permissions", "administrator"));
+                options.AddPolicy("Manager", policy => policy.RequireClaim("permissions", "Manager"));
+            });
 
             var app = builder.Build();
             app.UseCors(myAllowSpecificOrigins);
