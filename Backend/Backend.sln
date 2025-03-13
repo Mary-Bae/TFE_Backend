@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35728.132 d17.12
+VisualStudioVersion = 17.12.35728.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C1A40291-BD5C-4972-9835-0B5BF79EC37C}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{994BDEAD-413E-4F05-8207-D5C871F200CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{02EE9232-BE0B-45A3-9306-6B375CDC5130}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{CF91BEEC-0861-4390-990A-CDF61AAF7F43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{02EE9232-BE0B-45A3-9306-6B375CDC5130}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02EE9232-BE0B-45A3-9306-6B375CDC5130}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02EE9232-BE0B-45A3-9306-6B375CDC5130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF91BEEC-0861-4390-990A-CDF61AAF7F43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF91BEEC-0861-4390-990A-CDF61AAF7F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF91BEEC-0861-4390-990A-CDF61AAF7F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF91BEEC-0861-4390-990A-CDF61AAF7F43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,5 +50,6 @@ Global
 		{A5D05FBB-D8B4-4E3C-A7A6-874C414E711E} = {C1A40291-BD5C-4972-9835-0B5BF79EC37C}
 		{994BDEAD-413E-4F05-8207-D5C871F200CA} = {C1A40291-BD5C-4972-9835-0B5BF79EC37C}
 		{02EE9232-BE0B-45A3-9306-6B375CDC5130} = {C1A40291-BD5C-4972-9835-0B5BF79EC37C}
+		{CF91BEEC-0861-4390-990A-CDF61AAF7F43} = {C1A40291-BD5C-4972-9835-0B5BF79EC37C}
 	EndGlobalSection
 EndGlobal

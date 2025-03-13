@@ -1,4 +1,7 @@
 
+using BusinessLayer;
+using DataAccessLayer;
+using Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 
@@ -29,6 +32,9 @@ namespace Presentation
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IDemandesService, DemandesService>();
+            builder.Services.AddScoped<IDemandesRepository, DemandesRepository>();
+
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(auth =>
