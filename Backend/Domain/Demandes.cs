@@ -10,8 +10,8 @@
        
             public int Id { get; set; }
             public string Type { get; set; }
-            public DateTime DateBegin { get; set; }
-            public DateTime DateEnd { get; set; }
+            public DateOnly DateBegin { get; set; }
+            public DateOnly DateEnd { get; set; }
             public string Comment { get; set; }
         
 

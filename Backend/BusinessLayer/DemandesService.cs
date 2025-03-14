@@ -16,15 +16,11 @@ namespace BusinessLayer
             var demande = _demandeRepo.GetDemandes();
             return demande;
         }
+        public void Add(Demandes dto)
+        {
+            _demandeRepo.Add(dto);
+        }
 
 
-
-
-        //public void Add(Demandes dto)
-        //{
-        //    _demandeRepo.Add(dto);
-        //}
-
-        
     }
 }

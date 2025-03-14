@@ -9,7 +9,7 @@ namespace Interfaces
 {
     public interface IDemandesService
     {
-        //void Add(Demandes demande);
+        void Add(Demandes demande);
         IEnumerable<Demandes> GetDemandes();
     }
 }

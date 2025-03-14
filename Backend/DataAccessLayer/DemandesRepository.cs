@@ -13,18 +13,18 @@ namespace DataAccessLayer
         {
             return _dbProvisoire;
         }
-        //public void Add(Demandes dto)
-        //{
-        //    var demande = new Demandes
-        //    {
-        //        Id = _demandes.Count + 1,
-        //        Type = dto.Type,
-        //        DateBegin = dto.DateBegin,
-        //        DateEnd = dto.DateEnd,
-        //        Comment = dto.Comment
-        //    };
-        //    _demandes.Add(demande);
-        //}
+        public void Add(Demandes dto)
+        {
+            var demande = new Demandes(dto.Type)
+            {
+                Id = _dbProvisoire.Count + 1,
+                Type = dto.Type,
+                DateBegin = dto.DateBegin,
+                DateEnd = dto.DateEnd,
+                Comment = dto.Comment
+            };
+            _dbProvisoire.Add(demande);
+        }
 
     }
 }

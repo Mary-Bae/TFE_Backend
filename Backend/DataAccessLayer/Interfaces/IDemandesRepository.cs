@@ -10,7 +10,7 @@ namespace Interfaces
 {
     public interface IDemandesRepository
     {
-        //void Add(Demandes demande);
+        void Add(Demandes demande);
         IEnumerable<Demandes> GetDemandes();
     }
 }
