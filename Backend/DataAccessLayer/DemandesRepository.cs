@@ -13,6 +13,10 @@ namespace DataAccessLayer
         {
             return _dbProvisoire;
         }
+        public Demandes GetDemandeById(int id)
+        {
+            return _dbProvisoire.FirstOrDefault(d => d.Id == id);
+        }
         public void Add(Demandes dto)
         {
             var demande = new Demandes(dto.Type)

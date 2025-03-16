@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Domain;
 using Interfaces;
+using DataAccessLayer;
 
 namespace Presentation.Controllers
 {
@@ -21,6 +22,20 @@ namespace Presentation.Controllers
         public IEnumerable<Demandes> GetDemandes()
         {
             return _demandesService.GetDemandes();
+        }
+
+        //[Authorize(Policy = "employee")]
+        [HttpGet("GetDemandeById")]
+        public IActionResult GetDemandeById(int id)
+        {
+            Demandes demande = _demandesService.GetDemandeById(id);
+
+            if (demande == null)
+            {
+                return NotFound($"Aucune demande trouvée avec l'ID {id}");
+            }
+
+            return Ok(demande);
         }
 
         [HttpPost("AddDemande")]

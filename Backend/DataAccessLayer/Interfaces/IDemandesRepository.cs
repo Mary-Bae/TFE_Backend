@@ -12,5 +12,6 @@ namespace Interfaces
     {
         void Add(Demandes demande);
         IEnumerable<Demandes> GetDemandes();
+        Demandes GetDemandeById(int id);
     }
 }
