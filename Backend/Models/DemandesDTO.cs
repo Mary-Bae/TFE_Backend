@@ -1,18 +1,29 @@
 ﻿using Microsoft.VisualBasic;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Models
 {
-    public class Demandes
+    public class DemandesDTO
     {
-        public int Id { get; set; }
-        public string Type { get; set; }
-        public DateTime DateBegin { get; set; }
-        public DateTime DateEnd { get; set; }
-        public string Comment { get; set; }
+        [JsonPropertyName("DEM_id")]
+        public int DEM_id { get; set; }
+        [JsonPropertyName("DEM_DteDemande")]
+        public DateTime DEM_DteDemande { get; set; }
+        [JsonPropertyName("DEM_DteDebut")]
+        public DateTime DEM_DteDebut { get; set; }
+        [JsonPropertyName("DEM_DteFin")]
+        public DateTime DEM_DteFin { get; set; }
+        [JsonPropertyName("DEM_Comm")]
+        public string? DEM_Comm { get; set; }
+        [JsonPropertyName("TYPE_Libelle")]
+        public string? TYPE_Libelle{ get; set; }
+        [JsonPropertyName("STAT_Libelle")]
+        public string? STAT_Libelle { get; set; }
+        [JsonPropertyName("DEM_Justificatif")]
+        public string? DEM_Justificatif { get; set; }
+        [JsonPropertyName("DEM_DureeHeures")]
+        public Decimal DEM_DureeHeures { get; set; }
+       
     }
 }

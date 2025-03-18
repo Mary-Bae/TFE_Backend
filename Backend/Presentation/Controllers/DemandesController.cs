@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Domain;
 using Interfaces;
-using DataAccessLayer;
+using Models;
 
 namespace Presentation.Controllers
 {
@@ -19,36 +19,48 @@ namespace Presentation.Controllers
 
         //[Authorize(Policy = "employee")]
         [HttpGet("GetDemandes")]
-        public IEnumerable<Demandes> GetDemandes()
+        public async Task<ActionResult> GetDemandes()
         {
-            return _demandesService.GetDemandes();
+            try
+            {
+                List<DemandesDTO> lst;
+
+                IDemandesService demandeSvc = _demandesService;
+                lst = await demandeSvc.GetDemandes<DemandesDTO>();
+                return Ok(lst);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
 
         //[Authorize(Policy = "employee")]
-        [HttpGet("GetDemandeById")]
-        public IActionResult GetDemandeById(int id)
-        {
-            Demandes demande = _demandesService.GetDemandeById(id);
+        //[HttpGet("GetDemandeById")]
+        //public IActionResult GetDemandeById(int id)
+        //{
+        //    Demandes demande = _demandesService.GetDemandeById(id);
 
-            if (demande == null)
-            {
-                return NotFound($"Aucune demande trouvée avec l'ID {id}");
-            }
+        //    if (demande == null)
+        //    {
+        //        return NotFound($"Aucune demande trouvée avec l'ID {id}");
+        //    }
 
-            return Ok(demande);
-        }
+        //    return Ok(demande);
+        //}
 
-        [HttpPost("AddDemande")]
-        public IActionResult Post(Demandes demande)
-        {
-            if (demande == null)
-            {
-                return BadRequest("La demande est invalide.");
-            }
-            _demandesService.Add(demande);
+        //[HttpPost("AddDemande")]
+        //public IActionResult Post(Demandes demande)
+        //{
+        //    if (demande == null)
+        //    {
+        //        return BadRequest("La demande est invalide.");
+        //    }
+        //    _demandesService.Add(demande);
 
-            return Ok(new { Message = "Demande ajoutée avec succès" });
-        }
+        //    return Ok(new { Message = "Demande ajoutée avec succès" });
+        //}
 
 
 
