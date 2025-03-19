@@ -3,6 +3,7 @@ using BusinessLayer;
 using DataAccessLayer;
 using Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using System.Security.Claims;
 
 namespace Presentation
@@ -32,8 +33,14 @@ namespace Presentation
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IDemandesService, DemandesService>();
-            builder.Services.AddScoped<IDemandesRepository, DemandesRepository>();
+            builder.Services.AddScoped<IDemandesRepository, DemandesRepository>(serviceProvider =>
+            {
+                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                var connectionString = configuration.GetConnectionString("ConnectDb");
+                return new DemandesRepository(new SqlConnection(connectionString));
+            });
 
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

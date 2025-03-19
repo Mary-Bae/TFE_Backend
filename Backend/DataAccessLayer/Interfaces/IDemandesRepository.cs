@@ -1,16 +1,13 @@
 ﻿using Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Interfaces
 {
     public interface IDemandesRepository
     {
-        void Add(Demandes demande);
-        IEnumerable<Demandes> GetDemandes();
+        //void Add(Demandes demande);
+        Task<List<T>> GetDemandes<T>();
+        Task<List<T>> GetDemandesByUser<T>(string auth0Id);
+
+        //Demandes GetDemandeById(int id);
     }
 }

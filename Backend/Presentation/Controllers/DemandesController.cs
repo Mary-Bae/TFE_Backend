@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Domain;
 using Interfaces;
+using Models;
 
 namespace Presentation.Controllers
 {
@@ -17,32 +18,54 @@ namespace Presentation.Controllers
         }
 
         //[Authorize(Policy = "employee")]
-        [HttpGet("GetDemandes")]
-        public IEnumerable<Demandes> GetDemandes()
-        {
-            return _demandesService.GetDemandes();
-        }
 
-        [HttpPost("AddDemande")]
-        public IActionResult Post(Demandes demande)
+
+        [Authorize (Policy = "employee")]
+        [HttpGet("GetDemandesByUser")]
+        public async Task<ActionResult> GetDemandesByUser([FromServices] IAuthService authService)
         {
-            if (demande == null)
+            try
             {
-                return BadRequest("La demande est invalide.");
+                string auth0Id = authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
+                var lst = await _demandesService.GetDemandesByUser<DemandesDTO>(auth0Id);
+                return Ok(lst);
             }
-            _demandesService.Add(demande);
-
-            return Ok(new { Message = "Demande ajoutée avec succès" });
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
+        //[Authorize(Policy = "employee")]
+        //[HttpGet("GetDemandeById")]
+        //public IActionResult GetDemandeById(int id)
+        //{
+        //    Demandes demande = _demandesService.GetDemandeById(id);
 
+        //    if (demande == null)
+        //    {
+        //        return NotFound($"Aucune demande trouvée avec l'ID {id}");
+        //    }
 
-        [HttpGet("GetPublic")]
-        public ActionResult GetPublic()
-        {
-            return Ok(new { Message = "Test du public" });
-        }
+        //    return Ok(demande);
+        //}
+
+        //[HttpPost("AddDemande")]
+        //public IActionResult Post(Demandes demande)
+        //{
+        //    if (demande == null)
+        //    {
+        //        return BadRequest("La demande est invalide.");
+        //    }
+        //    _demandesService.Add(demande);
+
+        //    return Ok(new { Message = "Demande ajoutée avec succès" });
+        //}
 
         [Authorize(Policy = "employee")]
         [HttpGet("GetPrivateEmployee")]

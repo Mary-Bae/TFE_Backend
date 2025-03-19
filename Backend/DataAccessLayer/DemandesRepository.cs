@@ -1,30 +1,57 @@
 ﻿using Interfaces;
 using Domain;
+using Dapper;
+using System.Data;
+using System.Security.Cryptography;
+using System.Reflection.Metadata;
 
 namespace DataAccessLayer
 {
     public class DemandesRepository : IDemandesRepository
     {
+        IDbConnection _Connection;
 
-        //Provisoire en attente de DB
-        private static List<Demandes> _dbProvisoire = new List<Demandes> {new Demandes("Congé légal"), new Demandes("Congé de maternité"), new Demandes("congé de circonstances") };
-       
-        public IEnumerable<Demandes> GetDemandes()
+        public DemandesRepository(IDbConnection pConnection)
         {
-            return _dbProvisoire;
+            _Connection = pConnection;
         }
-        public void Add(Demandes dto)
+        public async Task<List<T>> GetDemandes<T>()
         {
-            var demande = new Demandes(dto.Type)
+            var lst = await _Connection.QueryAsync<T>("[shUser].[SelectDemande]");
+            return lst.ToList();
+        }
+        public async Task<List<T>> GetDemandesByUser<T>(string auth0Id)
+        {
+            try
             {
-                Id = _dbProvisoire.Count + 1,
-                Type = dto.Type,
-                DateBegin = dto.DateBegin,
-                DateEnd = dto.DateEnd,
-                Comment = dto.Comment
-            };
-            _dbProvisoire.Add(demande);
+                var parameters = new DynamicParameters();
+                parameters.Add("@Auth0Id", auth0Id);
+
+                var lst = await _Connection.QueryAsync<T>("[shUser].[SelectDemandeByUser]", parameters, commandType: CommandType.StoredProcedure);
+            return lst.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
         }
+
+        //public Demandes GetDemandeById(int id)
+        //{
+        //    return _dbProvisoire.FirstOrDefault(d => d.Id == id);
+        //}
+        //public void Add(Demandes dto)
+        //{
+        //    var demande = new Demandes(dto.Type)
+        //    {
+        //        Id = _dbProvisoire.Count + 1,
+        //        Type = dto.Type,
+        //        DateBegin = dto.DateBegin,
+        //        DateEnd = dto.DateEnd,
+        //        Comment = dto.Comment
+        //    };
+        //    _dbProvisoire.Add(demande);
+        //}
 
     }
 }
