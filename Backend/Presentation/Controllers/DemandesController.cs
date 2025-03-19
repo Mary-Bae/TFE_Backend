@@ -18,16 +18,21 @@ namespace Presentation.Controllers
         }
 
         //[Authorize(Policy = "employee")]
-        [HttpGet("GetDemandes")]
-        public async Task<ActionResult> GetDemandes()
+
+
+        [Authorize (Policy = "employee")]
+        [HttpGet("GetDemandesByUser")]
+        public async Task<ActionResult> GetDemandesByUser([FromServices] IAuthService authService)
         {
             try
             {
-                List<DemandesDTO> lst;
-
-                IDemandesService demandeSvc = _demandesService;
-                lst = await demandeSvc.GetDemandes<DemandesDTO>();
+                string auth0Id = authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
+                var lst = await _demandesService.GetDemandesByUser<DemandesDTO>(auth0Id);
                 return Ok(lst);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (Exception ex)
             {
@@ -61,15 +66,6 @@ namespace Presentation.Controllers
 
         //    return Ok(new { Message = "Demande ajoutée avec succès" });
         //}
-
-
-
-
-        [HttpGet("GetPublic")]
-        public ActionResult GetPublic()
-        {
-            return Ok(new { Message = "Test du public" });
-        }
 
         [Authorize(Policy = "employee")]
         [HttpGet("GetPrivateEmployee")]

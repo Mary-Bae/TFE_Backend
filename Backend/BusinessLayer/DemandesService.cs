@@ -18,6 +18,10 @@ namespace BusinessLayer
             var lst = await demandeRepo.GetDemandes<T>();
             return lst.ToList<T>();
         }
+        public async Task<List<T>> GetDemandesByUser<T>(string auth0Id)
+        {
+            return await _demandeRepo.GetDemandesByUser<T>(auth0Id);
+        }
 
         //public void Add(Demandes dto)
         //{

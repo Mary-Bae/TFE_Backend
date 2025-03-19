@@ -2,6 +2,8 @@
 using Domain;
 using Dapper;
 using System.Data;
+using System.Security.Cryptography;
+using System.Reflection.Metadata;
 
 namespace DataAccessLayer
 {
@@ -17,6 +19,21 @@ namespace DataAccessLayer
         {
             var lst = await _Connection.QueryAsync<T>("[shUser].[SelectDemande]");
             return lst.ToList();
+        }
+        public async Task<List<T>> GetDemandesByUser<T>(string auth0Id)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Auth0Id", auth0Id);
+
+                var lst = await _Connection.QueryAsync<T>("[shUser].[SelectDemandeByUser]", parameters, commandType: CommandType.StoredProcedure);
+            return lst.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
         }
 
         //public Demandes GetDemandeById(int id)
