@@ -17,9 +17,6 @@ namespace Presentation.Controllers
             _demandesService = demandesService;
         }
 
-        //[Authorize(Policy = "employee")]
-
-
         [Authorize (Policy = "employee")]
         [HttpGet("GetDemandesByUser")]
         public async Task<ActionResult> GetDemandesByUser([FromServices] IAuthService authService)
@@ -28,6 +25,25 @@ namespace Presentation.Controllers
             {
                 string auth0Id = authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
                 var lst = await _demandesService.GetDemandesByUser<DemandesDTO>(auth0Id);
+                return Ok(lst);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize(Policy = "employee")]
+        [HttpGet("GetTypeAbsByUser")]
+        public async Task<ActionResult> GetTypeAbsByUser([FromServices] IAuthService authService)
+        {
+            try
+            {
+                string auth0Id = authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
+                var lst = await _demandesService.GetTypeAbsByUser<TypeAbsenceDTO>(auth0Id);
                 return Ok(lst);
             }
             catch (UnauthorizedAccessException ex)
@@ -66,26 +82,5 @@ namespace Presentation.Controllers
 
         //    return Ok(new { Message = "Demande ajoutée avec succès" });
         //}
-
-        [Authorize(Policy = "employee")]
-        [HttpGet("GetPrivateEmployee")]
-        public ActionResult GetPrivateEmployee()
-        {
-            return Ok(new { Message = "Test du privé de l'employé" });
-        }
-
-        [Authorize]
-        [HttpGet("GetPrivate")]
-        public ActionResult GetPrivate()
-        {
-            return Ok(new { Message = "Test du privé" });
-        }
-
-        [Authorize(Policy = "administrator")]
-        [HttpGet("GetPrivateAdmin")]
-        public ActionResult GetPrivateAdmin()
-        {
-            return Ok(new { Message = "Test du privé de l'admin" });
-        }
     }
 }

@@ -35,6 +35,21 @@ namespace DataAccessLayer
                 throw new DBConcurrencyException("Erreur: ", ex);
             }
         }
+        public async Task<List<T>> GetTypeAbsByUser<T>(string auth0Id)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Auth0Id", auth0Id);
+
+                var lst = await _Connection.QueryAsync<T>("[shUser].[TypeAbsenceByUser]", parameters, commandType: CommandType.StoredProcedure);
+                return lst.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
 
         //public Demandes GetDemandeById(int id)
         //{
