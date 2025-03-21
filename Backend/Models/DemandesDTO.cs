@@ -17,7 +17,9 @@ namespace Models
         [JsonPropertyName("DEM_Comm")]
         public string? DEM_Comm { get; set; }
         [JsonPropertyName("TYPE_Libelle")]
-        public string? TYPE_Libelle{ get; set; }
+        public string? TYPE_Libelle { get; set; }
+        [JsonPropertyName("TYPE_id")]
+        public int TYPE_id{ get; set; }
         [JsonPropertyName("STAT_Libelle")]
         public string? STAT_Libelle { get; set; }
         [JsonPropertyName("DEM_Justificatif")]

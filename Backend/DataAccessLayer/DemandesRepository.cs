@@ -4,6 +4,7 @@ using Dapper;
 using System.Data;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
+using Models;
 
 namespace DataAccessLayer
 {
@@ -44,6 +45,27 @@ namespace DataAccessLayer
 
                 var lst = await _Connection.QueryAsync<T>("[shUser].[TypeAbsenceByUser]", parameters, commandType: CommandType.StoredProcedure);
                 return lst.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
+
+        public async Task AddDemandeAbs(DemandesDTO demande, string auth0Id)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@auth0Id", auth0Id);
+                parameters.Add("@DEM_DteDebut", demande.DEM_DteDebut);
+                parameters.Add("@DEM_DteFin", demande.DEM_DteFin);
+                parameters.Add("@DEM_Com", demande.DEM_Comm);
+                parameters.Add("@DEM_TYPE_id", demande.TYPE_id);
+                parameters.Add("@DEM_Justificatif", demande.DEM_Justificatif);
+                parameters.Add("@DEM_DureeHeures", demande.DEM_DureeHeures);
+
+                await _Connection.ExecuteAsync("[shUser].[AddDemande]", parameters, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
