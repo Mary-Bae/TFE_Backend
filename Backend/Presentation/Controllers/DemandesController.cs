@@ -55,7 +55,22 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Policy = "employee")]
+        [HttpPost("AjoutDemandeAbsence")]
+        public async Task<IActionResult> AjoutDemandeAbsence(AddDemandeDTO ajoutDemande, [FromServices] IAuthService authService)
+        {
+            try
+            {
+                IDemandesService demande = _demandesService;
+                string auth0Id = authService.GetUserAuth0Id(User);
+                await demande.AddDemandeAbs(ajoutDemande, auth0Id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         //[Authorize(Policy = "employee")]
         //[HttpGet("GetDemandeById")]
@@ -71,16 +86,6 @@ namespace Presentation.Controllers
         //    return Ok(demande);
         //}
 
-        //[HttpPost("AddDemande")]
-        //public IActionResult Post(Demandes demande)
-        //{
-        //    if (demande == null)
-        //    {
-        //        return BadRequest("La demande est invalide.");
-        //    }
-        //    _demandesService.Add(demande);
 
-        //    return Ok(new { Message = "Demande ajoutée avec succès" });
-        //}
     }
 }
