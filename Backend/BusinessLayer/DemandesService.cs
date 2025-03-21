@@ -26,7 +26,7 @@ namespace BusinessLayer
         {
             return await _demandeRepo.GetTypeAbsByUser<T>(auth0Id);
         }
-        public async Task AddDemandeAbs(DemandesDTO demande, string auth0Id)
+        public async Task AddDemandeAbs(AddDemandeDTO demande, string auth0Id)
         {
             IDemandesRepository demandeRepo = _demandeRepo;
             await demandeRepo.AddDemandeAbs(demande, auth0Id);

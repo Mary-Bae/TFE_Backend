@@ -52,7 +52,7 @@ namespace DataAccessLayer
             }
         }
 
-        public async Task AddDemandeAbs(DemandesDTO demande, string auth0Id)
+        public async Task AddDemandeAbs(AddDemandeDTO demande, string auth0Id)
         {
             try
             {
@@ -60,8 +60,8 @@ namespace DataAccessLayer
                 parameters.Add("@auth0Id", auth0Id);
                 parameters.Add("@DEM_DteDebut", demande.DEM_DteDebut);
                 parameters.Add("@DEM_DteFin", demande.DEM_DteFin);
-                parameters.Add("@DEM_Com", demande.DEM_Comm);
-                parameters.Add("@DEM_TYPE_id", demande.TYPE_id);
+                parameters.Add("@DEM_Comm", demande.DEM_Comm);
+                parameters.Add("@DEM_TYPE_id", demande.DEM_TYPE_id);
                 parameters.Add("@DEM_Justificatif", demande.DEM_Justificatif);
                 parameters.Add("@DEM_DureeHeures", demande.DEM_DureeHeures);
 

@@ -8,6 +8,8 @@ namespace Models
     {
         [JsonPropertyName("TAEM_id")]
         public int TAEM_id { get; set; }
+        [JsonPropertyName("TAEM_TYPE_id")]
+        public int TAEM_TYPE_id { get; set; }
         [JsonPropertyName("TYPE_Libelle")]
         public string? TYPE_Libelle { get; set; }
         [JsonPropertyName("TAEM_NbrJoursAn")]

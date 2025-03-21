@@ -19,7 +19,7 @@ namespace Presentation.Controllers
 
         [Authorize (Policy = "employee")]
         [HttpGet("GetDemandesByUser")]
-        public async Task<ActionResult> GetDemandesByUser(IAuthService authService)
+        public async Task<ActionResult> GetDemandesByUser([FromServices] IAuthService authService)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Presentation.Controllers
         }
         [Authorize(Policy = "employee")]
         [HttpGet("GetTypeAbsByUser")]
-        public async Task<ActionResult> GetTypeAbsByUser(IAuthService authService)
+        public async Task<ActionResult> GetTypeAbsByUser([FromServices] IAuthService authService)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Presentation.Controllers
         }
         [Authorize(Policy = "employee")]
         [HttpPost("AjoutDemandeAbsence")]
-        public async Task<IActionResult> AjoutDemandeAbsence(DemandesDTO ajoutDemande, IAuthService authService)
+        public async Task<IActionResult> AjoutDemandeAbsence(AddDemandeDTO ajoutDemande, [FromServices] IAuthService authService)
         {
             try
             {
