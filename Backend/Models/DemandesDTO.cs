@@ -54,7 +54,7 @@ namespace Models
         public Decimal DEM_DureeHeures { get; set; }
 
     }
-    public class AddDemandeDTO
+    public class AddAndUpdDemandeDTO
     {
         [JsonPropertyName("DEM_DteDebut")]
         public DateTime DEM_DteDebut { get; set; }

@@ -79,13 +79,28 @@ namespace Presentation.Controllers
         }
         [Authorize(Policy = "employee")]
         [HttpPost("AjoutDemandeAbsence")]
-        public async Task<IActionResult> AjoutDemandeAbsence(AddDemandeDTO ajoutDemande, IAuthService authService)
+        public async Task<IActionResult> AjoutDemandeAbsence(AddAndUpdDemandeDTO ajoutDemande, IAuthService authService)
         {
             try
             {
                 IDemandesService demande = _demandesService;
                 string auth0Id = authService.GetUserAuth0Id(User);
                 await demande.AddDemandeAbs(ajoutDemande, auth0Id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize(Policy = "employee")]
+        [HttpPut("MajDemande")]
+        public async Task<IActionResult> MajDemande(int id, AddAndUpdDemandeDTO majDemande)
+        {
+            try
+            {
+                IDemandesService demande = _demandesService;
+                await demande.UpdateDemande(id, majDemande);
                 return Ok();
             }
             catch (Exception ex)
