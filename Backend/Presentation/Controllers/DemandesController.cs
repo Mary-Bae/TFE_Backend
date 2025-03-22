@@ -10,19 +10,22 @@ namespace Presentation.Controllers
     public class DemandesController : ControllerBase
     {
         private readonly IDemandesService _demandesService;
+        private readonly IAuthService _authService;
 
-        public DemandesController(IDemandesService demandesService)
+        public DemandesController(IDemandesService demandesService, IAuthService authService)
         {
             _demandesService = demandesService;
+            _authService = authService;
         }
 
         [Authorize (Policy = "employee")]
         [HttpGet("GetDemandesByUser")]
-        public async Task<IActionResult> GetDemandesByUser(IAuthService authService)
+        public async Task<IActionResult> GetDemandesByUser()
         {
             try
             {
-                string auth0Id = authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
+                string auth0Id = _authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
+                Console.WriteLine($"Auth0Id récupéré : {auth0Id}");
                 var lst = await _demandesService.GetDemandesByUser<GetDemandesDTO>(auth0Id);
                 return Ok(lst);
             }
@@ -60,11 +63,12 @@ namespace Presentation.Controllers
         }
         [Authorize(Policy = "employee")]
         [HttpGet("GetTypeAbsByUser")]
-        public async Task<IActionResult> GetTypeAbsByUser(IAuthService authService)
+        public async Task<IActionResult> GetTypeAbsByUser()
         {
             try
             {
-                string auth0Id = authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
+                string auth0Id = _authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
+                Console.WriteLine($"Auth0Id récupéré : {auth0Id}");
                 var lst = await _demandesService.GetTypeAbsByUser<TypeAbsenceDTO>(auth0Id);
                 return Ok(lst);
             }
@@ -79,13 +83,12 @@ namespace Presentation.Controllers
         }
         [Authorize(Policy = "employee")]
         [HttpPost("AjoutDemandeAbsence")]
-        public async Task<IActionResult> AjoutDemandeAbsence(AddAndUpdDemandeDTO ajoutDemande, IAuthService authService)
+        public async Task<IActionResult> AjoutDemandeAbsence(AddAndUpdDemandeDTO ajoutDemande)
         {
             try
             {
-                IDemandesService demande = _demandesService;
-                string auth0Id = authService.GetUserAuth0Id(User);
-                await demande.AddDemandeAbs(ajoutDemande, auth0Id);
+                string auth0Id = _authService.GetUserAuth0Id(User);
+                await _demandesService.AddDemandeAbs(ajoutDemande, auth0Id);
                 return Ok();
             }
             catch (Exception ex)
@@ -99,8 +102,7 @@ namespace Presentation.Controllers
         {
             try
             {
-                IDemandesService demande = _demandesService;
-                await demande.UpdateDemande(id, majDemande);
+                await _demandesService.UpdateDemande(id, majDemande);
                 return Ok();
             }
             catch (Exception ex)

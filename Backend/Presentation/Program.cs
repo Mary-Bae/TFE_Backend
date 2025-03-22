@@ -61,7 +61,6 @@ namespace Presentation
             });
 
             var app = builder.Build();
-            app.UseCors(myAllowSpecificOrigins);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -70,6 +69,7 @@ namespace Presentation
                 app.UseSwaggerUI();
             }
             app.UseHttpsRedirection();
+            app.UseCors(myAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
             
