@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain;
 using Interfaces;
 using Models;
 
@@ -19,12 +18,12 @@ namespace Presentation.Controllers
 
         [Authorize (Policy = "employee")]
         [HttpGet("GetDemandesByUser")]
-        public async Task<ActionResult> GetDemandesByUser([FromServices] IAuthService authService)
+        public async Task<IActionResult> GetDemandesByUser(IAuthService authService)
         {
             try
             {
                 string auth0Id = authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
-                var lst = await _demandesService.GetDemandesByUser<DemandesDTO>(auth0Id);
+                var lst = await _demandesService.GetDemandesByUser<GetDemandesDTO>(auth0Id);
                 return Ok(lst);
             }
             catch (UnauthorizedAccessException ex)
@@ -37,8 +36,31 @@ namespace Presentation.Controllers
             }
         }
         [Authorize(Policy = "employee")]
+        [HttpGet("GetDemandeById")]
+        public async Task<IActionResult?> GetDemandeById(int id)
+        {
+            try
+            {
+                var demande = await _demandesService.GetDemandeById<DemandesByIdDTO>(id);
+                if (demande == null)
+                {
+                    return NotFound($"Aucune demande trouvée avec l'ID {id}");
+                }
+
+                return Ok(demande);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize(Policy = "employee")]
         [HttpGet("GetTypeAbsByUser")]
-        public async Task<ActionResult> GetTypeAbsByUser([FromServices] IAuthService authService)
+        public async Task<IActionResult> GetTypeAbsByUser(IAuthService authService)
         {
             try
             {
@@ -57,7 +79,7 @@ namespace Presentation.Controllers
         }
         [Authorize(Policy = "employee")]
         [HttpPost("AjoutDemandeAbsence")]
-        public async Task<IActionResult> AjoutDemandeAbsence(AddDemandeDTO ajoutDemande, [FromServices] IAuthService authService)
+        public async Task<IActionResult> AjoutDemandeAbsence(AddDemandeDTO ajoutDemande, IAuthService authService)
         {
             try
             {
@@ -71,21 +93,5 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        //[Authorize(Policy = "employee")]
-        //[HttpGet("GetDemandeById")]
-        //public IActionResult GetDemandeById(int id)
-        //{
-        //    Demandes demande = _demandesService.GetDemandeById(id);
-
-        //    if (demande == null)
-        //    {
-        //        return NotFound($"Aucune demande trouvée avec l'ID {id}");
-        //    }
-
-        //    return Ok(demande);
-        //}
-
-
     }
 }

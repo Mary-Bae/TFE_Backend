@@ -1,5 +1,4 @@
 ﻿using Interfaces;
-using Domain;
 using Models;
 
 namespace BusinessLayer
@@ -22,6 +21,10 @@ namespace BusinessLayer
         {
             return await _demandeRepo.GetDemandesByUser<T>(auth0Id);
         }
+        public async Task<T?> GetDemandeById<T>(int demandeId)
+        {
+            return await _demandeRepo.GetDemandeById<T>(demandeId);
+        }
         public async Task<List<T>> GetTypeAbsByUser<T>(string auth0Id)
         {
             return await _demandeRepo.GetTypeAbsByUser<T>(auth0Id);
@@ -31,23 +34,5 @@ namespace BusinessLayer
             IDemandesRepository demandeRepo = _demandeRepo;
             await demandeRepo.AddDemandeAbs(demande, auth0Id);
         }
-
-        //public void Add(Demandes dto)
-        //{
-        //    _demandeRepo.Add(dto);
-        //}
-        //public Demandes GetDemandeById(int id)
-        //{
-        //    var demande = _demandeRepo.GetDemandeById(id);
-
-        //    if (demande == null)
-        //    {
-        //        throw new KeyNotFoundException($"Aucune demande trouvée avec l'ID {id}");
-        //    }
-
-        //    return demande;
-        //}
-
-
     }
 }
