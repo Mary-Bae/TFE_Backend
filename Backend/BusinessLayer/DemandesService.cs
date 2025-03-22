@@ -11,12 +11,6 @@ namespace BusinessLayer
         {
             _demandeRepo = demandesRepo;
         }
-        async Task<List<T>> IDemandesService.GetDemandes<T>()
-        {
-            IDemandesRepository demandeRepo = _demandeRepo;
-            var lst = await demandeRepo.GetDemandes<T>();
-            return lst.ToList<T>();
-        }
         public async Task<List<T>> GetDemandesByUser<T>(string auth0Id)
         {
             return await _demandeRepo.GetDemandesByUser<T>(auth0Id);
@@ -31,13 +25,11 @@ namespace BusinessLayer
         }
         public async Task AddDemandeAbs(AddAndUpdDemandeDTO demande, string auth0Id)
         {
-            IDemandesRepository demandeRepo = _demandeRepo;
-            await demandeRepo.AddDemandeAbs(demande, auth0Id);
+            await _demandeRepo.AddDemandeAbs(demande, auth0Id);
         }
         public async Task UpdateDemande(int pId, AddAndUpdDemandeDTO demande)
         {
-            IDemandesRepository demandeRepo = _demandeRepo;
-            await demandeRepo.UpdateDemande(pId, demande);
+            await _demandeRepo.UpdateDemande(pId, demande);
         }
     }
 }

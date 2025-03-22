@@ -15,16 +15,11 @@ namespace DataAccessLayer
         {
             _Connection = pConnection;
         }
-        public async Task<List<T>> GetDemandes<T>()
-        {
-            var lst = await _Connection.QueryAsync<T>("[shUser].[SelectDemande]");
-            return lst.ToList();
-        }
         public async Task<List<T>> GetDemandesByUser<T>(string auth0Id)
         {
             try
             {
-                var parameters = new DynamicParameters();
+                 var parameters = new DynamicParameters();
                 parameters.Add("@Auth0Id", auth0Id);
 
                 var lst = await _Connection.QueryAsync<T>("[shUser].[SelectDemandeByUser]", parameters, commandType: CommandType.StoredProcedure);
