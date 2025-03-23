@@ -9,6 +9,7 @@ namespace Interfaces
         Task<T?> GetDemandeById<T>(int demandeId);
         Task AddDemandeAbs(AddAndUpdDemandeDTO demande, string auth0Id);
         Task UpdateDemande(int pId, AddAndUpdDemandeDTO demande);
+        Task DeleteDemande(int pId);
 
     }
 }
