@@ -25,7 +25,6 @@ namespace Presentation.Controllers
             try
             {
                 string auth0Id = _authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
-                Console.WriteLine($"Auth0Id récupéré : {auth0Id}");
                 var lst = await _demandesService.GetDemandesByUser<GetDemandesDTO>(auth0Id);
                 return Ok(lst);
             }

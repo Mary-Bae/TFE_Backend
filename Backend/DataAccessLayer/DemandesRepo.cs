@@ -7,11 +7,11 @@ using Models;
 
 namespace DataAccessLayer
 {
-    public class DemandesRepository : IDemandesRepository
+    public class DemandesRepo : IDemandesRepo
     {
         private readonly IDbConnection _Connection;
 
-        public DemandesRepository(IDbConnection pConnection)
+        public DemandesRepo(IDbConnection pConnection)
         {
             _Connection = pConnection;
         }

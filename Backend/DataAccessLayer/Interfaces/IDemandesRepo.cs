@@ -2,7 +2,7 @@
 
 namespace Interfaces
 {
-    public interface IDemandesRepository
+    public interface IDemandesRepo
     {
         Task<List<T>> GetDemandesByUser<T>(string auth0Id);
         Task<List<T>> GetTypeAbsByUser<T>(string auth0Id);

@@ -34,16 +34,19 @@ namespace Presentation
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<IDemandesService, DemandesService>();
+
             builder.Services.AddScoped<IDbConnection>(serviceProvider =>
             {
                 var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                 var connectionString = configuration.GetConnectionString("ConnectDb");
                 return new SqlConnection(connectionString);
             });
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IDemandesService, DemandesService>();
+            builder.Services.AddScoped<ICompteurService, CompteurService>();
 
-            builder.Services.AddScoped<IDemandesRepository, DemandesRepository>();
+            builder.Services.AddScoped<IDemandesRepo, DemandesRepo>();
+            builder.Services.AddScoped<ICompteurRepo, CompteurRepo>();
 
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
