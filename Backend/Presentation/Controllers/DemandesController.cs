@@ -25,7 +25,6 @@ namespace Presentation.Controllers
             try
             {
                 string auth0Id = _authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
-                Console.WriteLine($"Auth0Id récupéré : {auth0Id}");
                 var lst = await _demandesService.GetDemandesByUser<GetDemandesDTO>(auth0Id);
                 return Ok(lst);
             }
@@ -109,6 +108,22 @@ namespace Presentation.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        [Authorize(Policy = "employee")]
+        [HttpDelete("DelDemande")]
+        public async Task<IActionResult> DeleteDemande(int id)
+        {
+            try
+            {
+                await _demandesService.DeleteDemande(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
     }
 }

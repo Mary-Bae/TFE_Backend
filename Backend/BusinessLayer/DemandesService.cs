@@ -5,9 +5,9 @@ namespace BusinessLayer
 {
     public class DemandesService : IDemandesService
     {
-        private readonly IDemandesRepository _demandeRepo;
+        private readonly IDemandesRepo _demandeRepo;
 
-        public DemandesService(IDemandesRepository demandesRepo)
+        public DemandesService(IDemandesRepo demandesRepo)
         {
             _demandeRepo = demandesRepo;
         }
@@ -30,6 +30,10 @@ namespace BusinessLayer
         public async Task UpdateDemande(int pId, AddAndUpdDemandeDTO demande)
         {
             await _demandeRepo.UpdateDemande(pId, demande);
+        }
+        public async Task DeleteDemande(int pId)
+        {
+            await _demandeRepo.DeleteDemande(pId);
         }
     }
 }

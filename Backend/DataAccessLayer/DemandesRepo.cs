@@ -7,11 +7,11 @@ using Models;
 
 namespace DataAccessLayer
 {
-    public class DemandesRepository : IDemandesRepository
+    public class DemandesRepo : IDemandesRepo
     {
-        IDbConnection _Connection;
+        private readonly IDbConnection _Connection;
 
-        public DemandesRepository(IDbConnection pConnection)
+        public DemandesRepo(IDbConnection pConnection)
         {
             _Connection = pConnection;
         }
@@ -98,6 +98,21 @@ namespace DataAccessLayer
             catch (Exception ex)
             {
                 throw new Exception("Erreur : ", ex);
+            }
+        }
+        public async Task DeleteDemande(int pId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@DEM_id", pId);
+
+                await _Connection.ExecuteAsync("[shUser].[DeleteDemande]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur : ", ex);
+
             }
         }
 
