@@ -68,6 +68,7 @@ namespace Models
         public string? DEM_Justificatif { get; set; }
         [JsonPropertyName("DEM_DureeHeures")]
         public Decimal DEM_DureeHeures { get; set; }
+        public string? TypeJournee { get; set; }
 
     }
 }
