@@ -19,7 +19,7 @@ namespace Presentation.Controllers
             _authService = authService;
         }
 
-       // [Authorize(Policy = "employee")]
+        [Authorize(Policy = "employee")]
         [HttpGet("GetCompteurByUser")]
         public async Task<IActionResult> GetCompteurByUser()
         {
