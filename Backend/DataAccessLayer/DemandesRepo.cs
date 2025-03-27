@@ -80,7 +80,7 @@ namespace DataAccessLayer
                 throw new DBConcurrencyException("Erreur: ", ex);
             }
         }
-        public async Task UpdateDemande(int pId, AddAndUpdDemandeDTO demande)
+        public async Task UpdateDemande(int pId, AddAndUpdDemandeDTO demande, decimal duree)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace DataAccessLayer
                 parameters.Add("@DEM_Comm", demande.DEM_Comm);
                 parameters.Add("@DEM_TYPE_id", demande.DEM_TYPE_id);
                 parameters.Add("@DEM_Justificatif", demande.DEM_Justificatif);
-                parameters.Add("@DEM_DureeHeures", demande.DEM_DureeHeures);
+                parameters.Add("@DEM_DureeHeures", duree);
 
                 await _Connection.ExecuteAsync("[shUser].[UpdateDemande]", parameters, commandType: CommandType.StoredProcedure);
             }

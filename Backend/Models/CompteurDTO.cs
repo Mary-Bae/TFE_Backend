@@ -14,9 +14,9 @@ namespace Models
         public Decimal TAEM_NbrJoursAn { get; set; }
         [JsonPropertyName("TAEM_Heures")]
         public Decimal TAEM_Heures { get; set; }
-        [JsonPropertyName("DEM_DureeHeures")]
-        public Decimal DEM_DureeHeures { get; set; }
-        [JsonPropertyName("DureeRestante")]
-        public Decimal DureeRestante { get; set; }
+        [JsonPropertyName("TAEM_HeuresPrises")]
+        public Decimal TAEM_HeuresPrises { get; set; }
+        [JsonPropertyName("TAEM_HeuresRestantes")]
+        public Decimal TAEM_HeuresRestantes { get; set; }
     }
 }
