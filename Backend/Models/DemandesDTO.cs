@@ -18,14 +18,14 @@ namespace Models
         public string? DEM_Comm { get; set; }
         [JsonPropertyName("TYPE_Libelle")]
         public string? TYPE_Libelle { get; set; }
-        [JsonPropertyName("TYPE_id")]
-        public int DEM_TYPE_id{ get; set; }
+        [JsonPropertyName("DEM_TYPE_id")]
+        public int DEM_TYPE_id { get; set; }
         [JsonPropertyName("STAT_Libelle")]
         public string? STAT_Libelle { get; set; }
         [JsonPropertyName("DEM_Justificatif")]
         public string? DEM_Justificatif { get; set; }
         [JsonPropertyName("DEM_DureeHeures")]
-        public Decimal DEM_DureeHeures { get; set; }
+        public decimal DEM_DureeHeures { get; set; }
        
     }
     public class DemandesByIdDTO
@@ -51,7 +51,7 @@ namespace Models
         [JsonPropertyName("DEM_Justificatif")]
         public string? DEM_Justificatif { get; set; }
         [JsonPropertyName("DEM_DureeHeures")]
-        public Decimal DEM_DureeHeures { get; set; }
+        public decimal DEM_DureeHeures { get; set; }
 
     }
     public class AddAndUpdDemandeDTO
@@ -67,7 +67,7 @@ namespace Models
         [JsonPropertyName("DEM_Justificatif")]
         public string? DEM_Justificatif { get; set; }
         [JsonPropertyName("DEM_DureeHeures")]
-        public Decimal DEM_DureeHeures { get; set; }
+        public decimal DEM_DureeHeures { get; set; }
         public string? TypeJournee { get; set; }
 
     }

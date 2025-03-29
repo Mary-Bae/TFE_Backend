@@ -44,9 +44,11 @@ namespace Presentation
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IDemandesService, DemandesService>();
             builder.Services.AddScoped<ICompteurService, CompteurService>();
+            builder.Services.AddScoped<IJoursFeriesService, JoursFeriesService>();
 
             builder.Services.AddScoped<IDemandesRepo, DemandesRepo>();
             builder.Services.AddScoped<ICompteurRepo, CompteurRepo>();
+            builder.Services.AddScoped<IJoursFeriesRepo, JoursFeriesRepo>();
 
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
