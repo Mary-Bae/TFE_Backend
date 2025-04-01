@@ -2,32 +2,31 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Interfaces;
 using Models;
-using BusinessLayer;
 
 namespace Presentation.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CompteurController : ControllerBase
+    public class ManagerController : ControllerBase
     {
-        private readonly ICompteurService _compteurService;
+        private readonly IManagerService _managerService;
         private readonly IAuthService _authService;
 
-        public CompteurController(ICompteurService compteurService, IAuthService authService)
+        public ManagerController(IManagerService managerService, IAuthService authService)
         {
-            _compteurService = compteurService;
+            _managerService = managerService;
             _authService = authService;
         }
 
-        [Authorize(Policy = "employee")]
-        [HttpGet("GetCompteurByUser")]
-        public async Task<IActionResult> GetCompteurByUser()
+        [Authorize (Policy = "employee")]
+        [HttpGet("GetMailManagerByUser")]
+        public async Task<IActionResult> GetMailManagerByUser()
         {
             try
             {
                 string auth0Id = _authService.GetUserAuth0Id(User); // Récupérer l’ID Auth0
-                var lst = await _compteurService.GetCompteurByUser<CompteurDTO>(auth0Id);
-                return Ok(lst);
+                var eMail = await _managerService.GetMailManagerByUser<ManagerDTO>(auth0Id);
+                return Ok(eMail);
             }
             catch (UnauthorizedAccessException ex)
             {

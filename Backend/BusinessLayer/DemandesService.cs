@@ -25,11 +25,44 @@ namespace BusinessLayer
         }
         public async Task AddDemandeAbs(AddAndUpdDemandeDTO demande, string auth0Id)
         {
-            await _demandeRepo.AddDemandeAbs(demande, auth0Id);
+            decimal duree = 0;
+
+            switch (demande.TypeJournee)
+            {
+                case "Journee":
+                    duree = 8;
+                    break;
+                case "Matin":
+                    duree = 4;
+                    break;
+                case "Apres-midi":
+                    duree = 4;
+                    break;
+                default:
+                    throw new ArgumentException("Type de journée non valide.");
+            }
+
+            await _demandeRepo.AddDemandeAbs(demande, auth0Id, duree);
         }
         public async Task UpdateDemande(int pId, AddAndUpdDemandeDTO demande)
         {
-            await _demandeRepo.UpdateDemande(pId, demande);
+            decimal duree = 0;
+
+            switch (demande.TypeJournee)
+            {
+                case "Journee":
+                    duree = 8;
+                    break;
+                case "Matin":
+                    duree = 4;
+                    break;
+                case "Apres-midi":
+                    duree = 4;
+                    break;
+                default:
+                    throw new ArgumentException("Type de journée non valide.");
+            }
+            await _demandeRepo.UpdateDemande(pId, demande, duree);
         }
         public async Task DeleteDemande(int pId)
         {
