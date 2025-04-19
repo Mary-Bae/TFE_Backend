@@ -8,6 +8,8 @@ namespace Models
     {
         [JsonPropertyName("DEM_id")]
         public int DEM_id { get; set; }
+        [JsonPropertyName("EMP_Nom")]
+        public string? EMP_Nom { get; set; }
         [JsonPropertyName("DEM_DteDemande")]
         public DateTime DEM_DteDemande { get; set; }
         [JsonPropertyName("DEM_DteDebut")]

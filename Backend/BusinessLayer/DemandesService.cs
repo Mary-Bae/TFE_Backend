@@ -6,14 +6,21 @@ namespace BusinessLayer
     public class DemandesService : IDemandesService
     {
         private readonly IDemandesRepo _demandeRepo;
+        private readonly IManagerRepo _managerRepo;
 
-        public DemandesService(IDemandesRepo demandesRepo)
+        public DemandesService(IDemandesRepo demandesRepo, IManagerRepo managerRepo)
         {
             _demandeRepo = demandesRepo;
+            _managerRepo = managerRepo;
         }
         public async Task<List<T>> GetDemandesByUser<T>(string auth0Id)
         {
             return await _demandeRepo.GetDemandesByUser<T>(auth0Id);
+        }
+        public async Task<List<T>> GetDemandesEquipe<T>(string auth0Id)
+        {
+            var managerId = await _managerRepo.GetManagerId(auth0Id);
+            return await _demandeRepo.GetDemandesEquipe<T>(managerId);
         }
         public async Task<T?> GetDemandeById<T>(int demandeId)
         {

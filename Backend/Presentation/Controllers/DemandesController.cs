@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Interfaces;
 using Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Presentation.Controllers
 {
@@ -124,6 +125,26 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
 
+        }
+        [Authorize(Policy = "Manager")]
+        [HttpGet("GetDemandesEquipe")]
+        public async Task<IActionResult> GetDemandesEquipe()
+        {
+            try
+            {
+                var auth0Id = _authService.GetUserAuth0Id(User); // Récupérer l’ID Auth
+
+                var lst = await _demandesService.GetDemandesEquipe<GetDemandesDTO>(auth0Id);
+                return Ok(lst);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
