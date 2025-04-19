@@ -4,16 +4,20 @@ using System.Data;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Data.SqlClient;
 
 namespace DataAccessLayer
 {
     public class DemandesRepo : IDemandesRepo
     {
         private readonly IDbConnection _Connection;
+        private readonly IConfiguration _configuration; //Configuration specifique pour une connection Manager
 
-        public DemandesRepo(IDbConnection pConnection)
+        public DemandesRepo(IDbConnection pConnection, IConfiguration configuration)
         {
             _Connection = pConnection;
+            _configuration = configuration;
         }
         public async Task<List<T>> GetDemandesByUser<T>(string auth0Id)
         {
@@ -113,6 +117,25 @@ namespace DataAccessLayer
             {
                 throw new Exception("Erreur : ", ex);
 
+            }
+        }
+        public async Task<List<T>> GetDemandesEquipe<T>(int managerId)
+        {
+            try
+            {
+                //Connection à la DB avec le user manager
+                var connectionString = _configuration.GetConnectionString("ConnectDbManager");
+                using var connection = new SqlConnection(connectionString);
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@ManagerId", managerId);
+
+                var lst = await connection.QueryAsync<T>("[shManager].[SelectDemandesEquipe]", parameters, commandType: CommandType.StoredProcedure);
+                return lst.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
             }
         }
 

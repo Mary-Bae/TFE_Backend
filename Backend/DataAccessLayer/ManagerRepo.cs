@@ -30,5 +30,12 @@ namespace DataAccessLayer
                 throw new DBConcurrencyException("Erreur: ", ex);
             }
         }
+        public async Task<int> GetManagerId(string auth0Id)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Auth0Id", auth0Id);
+            var id = await _Connection.QueryAsync<int>("[shUser].[SelectIdEmploye]", parameters, commandType: CommandType.StoredProcedure);
+            return id.FirstOrDefault();
+        }
     }
 }
