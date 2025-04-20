@@ -6,9 +6,9 @@ namespace BusinessLayer
     public class DemandesService : IDemandesService
     {
         private readonly IDemandesRepo _demandeRepo;
-        private readonly IManagerRepo _managerRepo;
+        private readonly IEmployeRepo _managerRepo;
 
-        public DemandesService(IDemandesRepo demandesRepo, IManagerRepo managerRepo)
+        public DemandesService(IDemandesRepo demandesRepo, IEmployeRepo managerRepo)
         {
             _demandeRepo = demandesRepo;
             _managerRepo = managerRepo;

@@ -13,7 +13,6 @@ namespace DataAccessLayer
     {
         private readonly IDbConnection _connection;
         private readonly IDbConnection _connectManager;
-        //private readonly IConfiguration _configuration; //Configuration specifique pour une connection Manager
 
         public DemandesRepo(IDbChoixConnRepo connection)
         {

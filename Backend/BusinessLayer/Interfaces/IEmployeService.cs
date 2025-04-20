@@ -1,7 +1,8 @@
 ﻿namespace Interfaces
 {
-    public interface IManagerService
+    public interface IEmployeService
     {
         Task<T?> GetMailManagerByUser<T>(string auth0Id);
+        Task<T?> GetMailByDemande<T>(int demId);
     }
 }

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Interfaces\IManagerRepo.cs" />
+    <None Include="Interfaces\IEmployeRepo.cs" />
     <None Include="Interfaces\ICompteurRepo.cs" />
   </ItemGroup>
 
