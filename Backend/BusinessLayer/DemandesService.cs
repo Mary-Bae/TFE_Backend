@@ -6,9 +6,9 @@ namespace BusinessLayer
     public class DemandesService : IDemandesService
     {
         private readonly IDemandesRepo _demandeRepo;
-        private readonly IManagerRepo _managerRepo;
+        private readonly IEmployeRepo _managerRepo;
 
-        public DemandesService(IDemandesRepo demandesRepo, IManagerRepo managerRepo)
+        public DemandesService(IDemandesRepo demandesRepo, IEmployeRepo managerRepo)
         {
             _demandeRepo = demandesRepo;
             _managerRepo = managerRepo;
@@ -74,6 +74,10 @@ namespace BusinessLayer
         public async Task DeleteDemande(int pId)
         {
             await _demandeRepo.DeleteDemande(pId);
+        }
+        public async Task UpdStatusDemande(int pId, int pStatut)
+        {
+            await _demandeRepo.UpdStatusDemande(pId, pStatut);
         }
     }
 }

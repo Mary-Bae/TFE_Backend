@@ -11,5 +11,6 @@ namespace Interfaces
         Task AddDemandeAbs(AddAndUpdDemandeDTO demande, string auth0Id);
         Task UpdateDemande(int pId, AddAndUpdDemandeDTO demande);
         Task DeleteDemande(int pId);
+        Task UpdStatusDemande(int pId, int pStatut);
     }
 }

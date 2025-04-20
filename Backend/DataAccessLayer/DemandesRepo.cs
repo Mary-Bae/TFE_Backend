@@ -13,7 +13,6 @@ namespace DataAccessLayer
     {
         private readonly IDbConnection _connection;
         private readonly IDbConnection _connectManager;
-        //private readonly IConfiguration _configuration; //Configuration specifique pour une connection Manager
 
         public DemandesRepo(IDbChoixConnRepo connection)
         {
@@ -133,6 +132,20 @@ namespace DataAccessLayer
             catch (Exception ex)
             {
                 throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
+        public async Task UpdStatusDemande(int pId, int pStatut)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@DemandeId", pId);
+                parameters.Add("@Statut", pStatut);
+                await _connectManager.ExecuteAsync("[shManager].[AcceptRefusDemandes]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur : ", ex);
             }
         }
 
