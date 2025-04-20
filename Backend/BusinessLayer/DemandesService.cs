@@ -75,5 +75,9 @@ namespace BusinessLayer
         {
             await _demandeRepo.DeleteDemande(pId);
         }
+        public async Task UpdStatusDemande(int pId, int pStatut)
+        {
+            await _demandeRepo.UpdStatusDemande(pId, pStatut);
+        }
     }
 }

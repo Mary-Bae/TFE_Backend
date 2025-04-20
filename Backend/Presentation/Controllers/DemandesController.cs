@@ -146,5 +146,19 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Policy = "Manager")]
+        [HttpPut("MajStatutDemande")]
+        public async Task<IActionResult> MajStatutDemande(int pDemId, int pStatut)
+        {
+            try
+            {
+                await _demandesService.UpdStatusDemande(pDemId, pStatut);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

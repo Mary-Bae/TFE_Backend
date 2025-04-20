@@ -135,6 +135,20 @@ namespace DataAccessLayer
                 throw new DBConcurrencyException("Erreur: ", ex);
             }
         }
+        public async Task UpdStatusDemande(int pId, int pStatut)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@DemandeId", pId);
+                parameters.Add("@Statut", pStatut);
+                await _connectManager.ExecuteAsync("[shManager].[AcceptRefusDemandes]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur : ", ex);
+            }
+        }
 
     }
 }
