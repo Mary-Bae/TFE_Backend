@@ -3,6 +3,7 @@ using BusinessLayer;
 using DataAccessLayer;
 using Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Connections;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Security.Claims;
@@ -35,12 +36,7 @@ namespace Presentation
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddScoped<IDbConnection>(serviceProvider =>
-            {
-                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                var connectionString = configuration.GetConnectionString("ConnectDb");
-                return new SqlConnection(connectionString);
-            });
+            builder.Services.AddScoped<IDbChoixConnRepo, DbChoixConnRepo>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IDemandesService, DemandesService>();
             builder.Services.AddScoped<ICompteurService, CompteurService>();

@@ -4,22 +4,23 @@ using System.Data;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Models;
+using System.Data.Common;
 
 namespace DataAccessLayer
 {
     public class JoursFeriesRepo : IJoursFeriesRepo
     {
-        private readonly IDbConnection _Connection;
+        private readonly IDbConnection _connection;
 
-        public JoursFeriesRepo(IDbConnection pConnection)
+        public JoursFeriesRepo(IDbChoixConnRepo connection)
         {
-            _Connection = pConnection;
+            _connection = connection.CreateConnection("ConnectDb");
         }
         public async Task<List<T>> GetJoursFeries<T>()
         {
             try
             {
-                var lst = await _Connection.QueryAsync<T>("[shUser].[SelectJoursFeries]", commandType: CommandType.StoredProcedure);
+                var lst = await _connection.QueryAsync<T>("[shUser].[SelectJoursFeries]", commandType: CommandType.StoredProcedure);
             return lst.ToList();
             }
             catch (Exception ex)

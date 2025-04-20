@@ -11,13 +11,14 @@ namespace DataAccessLayer
 {
     public class DemandesRepo : IDemandesRepo
     {
-        private readonly IDbConnection _Connection;
-        private readonly IConfiguration _configuration; //Configuration specifique pour une connection Manager
+        private readonly IDbConnection _connection;
+        private readonly IDbConnection _connectManager;
+        //private readonly IConfiguration _configuration; //Configuration specifique pour une connection Manager
 
-        public DemandesRepo(IDbConnection pConnection, IConfiguration configuration)
+        public DemandesRepo(IDbChoixConnRepo connection)
         {
-            _Connection = pConnection;
-            _configuration = configuration;
+            _connection = connection.CreateConnection("ConnectDb");
+            _connectManager = connection.CreateConnection("ConnectDbManager");
         }
         public async Task<List<T>> GetDemandesByUser<T>(string auth0Id)
         {
@@ -26,7 +27,7 @@ namespace DataAccessLayer
                  var parameters = new DynamicParameters();
                 parameters.Add("@Auth0Id", auth0Id);
 
-                var lst = await _Connection.QueryAsync<T>("[shUser].[SelectDemandeByUser]", parameters, commandType: CommandType.StoredProcedure);
+                var lst = await _connection.QueryAsync<T>("[shUser].[SelectDemandeByUser]", parameters, commandType: CommandType.StoredProcedure);
                 return lst.ToList();
             }
             catch (Exception ex)
@@ -41,7 +42,7 @@ namespace DataAccessLayer
                 var parameters = new DynamicParameters();
                 parameters.Add("@Auth0Id", auth0Id);
 
-                var lst = await _Connection.QueryAsync<T>("[shUser].[TypeAbsenceByUser]", parameters, commandType: CommandType.StoredProcedure);
+                var lst = await _connection.QueryAsync<T>("[shUser].[TypeAbsenceByUser]", parameters, commandType: CommandType.StoredProcedure);
                 return lst.ToList();
             }
             catch (Exception ex)
@@ -62,7 +63,7 @@ namespace DataAccessLayer
                 parameters.Add("@DEM_Justificatif", demande.DEM_Justificatif);
                 parameters.Add("@DEM_DureeHeures", duree);
 
-                await _Connection.ExecuteAsync("[shUser].[AddDemande]", parameters, commandType: CommandType.StoredProcedure);
+                await _connection.ExecuteAsync("[shUser].[AddDemande]", parameters, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -76,7 +77,7 @@ namespace DataAccessLayer
                 var parameters = new DynamicParameters();
                 parameters.Add("@DEM_id", demandeId);
 
-                var demande = await _Connection.QuerySingleOrDefaultAsync<T>("[shUser].[SelectDemandeById]", parameters, commandType: CommandType.StoredProcedure);
+                var demande = await _connection.QuerySingleOrDefaultAsync<T>("[shUser].[SelectDemandeById]", parameters, commandType: CommandType.StoredProcedure);
                 return demande;
             }
             catch (Exception ex)
@@ -97,7 +98,7 @@ namespace DataAccessLayer
                 parameters.Add("@DEM_Justificatif", demande.DEM_Justificatif);
                 parameters.Add("@DEM_DureeHeures", duree);
 
-                await _Connection.ExecuteAsync("[shUser].[UpdateDemande]", parameters, commandType: CommandType.StoredProcedure);
+                await _connection.ExecuteAsync("[shUser].[UpdateDemande]", parameters, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -111,7 +112,7 @@ namespace DataAccessLayer
                 var parameters = new DynamicParameters();
                 parameters.Add("@DEM_id", pId);
 
-                await _Connection.ExecuteAsync("[shUser].[DeleteDemande]", parameters, commandType: CommandType.StoredProcedure);
+                await _connection.ExecuteAsync("[shUser].[DeleteDemande]", parameters, commandType: CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -123,14 +124,10 @@ namespace DataAccessLayer
         {
             try
             {
-                //Connection à la DB avec le user manager
-                var connectionString = _configuration.GetConnectionString("ConnectDbManager");
-                using var connection = new SqlConnection(connectionString);
-
                 var parameters = new DynamicParameters();
                 parameters.Add("@ManagerId", managerId);
 
-                var lst = await connection.QueryAsync<T>("[shManager].[SelectDemandesEquipe]", parameters, commandType: CommandType.StoredProcedure);
+                var lst = await _connectManager.QueryAsync<T>("[shManager].[SelectDemandesEquipe]", parameters, commandType: CommandType.StoredProcedure);
                 return lst.ToList();
             }
             catch (Exception ex)

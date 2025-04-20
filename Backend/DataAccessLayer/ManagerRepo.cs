@@ -9,11 +9,11 @@ namespace DataAccessLayer
 {
     public class ManagerRepo : IManagerRepo
     {
-        private readonly IDbConnection _Connection;
+        private readonly IDbConnection _connection;
 
-        public ManagerRepo(IDbConnection pConnection)
+        public ManagerRepo(IDbChoixConnRepo connection)
         {
-            _Connection = pConnection;
+            _connection = connection.CreateConnection("ConnectDb");
         }
         public async Task<T?> GetMailManagerByUser<T>(string auth0Id)
         {
@@ -22,7 +22,7 @@ namespace DataAccessLayer
                 var parameters = new DynamicParameters();
                 parameters.Add("@Auth0Id", auth0Id);
 
-               var eMail =  await _Connection.QueryAsync<T>("[shUser].[SelectMailManager]", parameters, commandType: CommandType.StoredProcedure);
+               var eMail =  await _connection.QueryAsync<T>("[shUser].[SelectMailManager]", parameters, commandType: CommandType.StoredProcedure);
                 return eMail.FirstOrDefault();
             }
             catch (Exception ex)
@@ -34,7 +34,7 @@ namespace DataAccessLayer
         {
             var parameters = new DynamicParameters();
             parameters.Add("@Auth0Id", auth0Id);
-            var id = await _Connection.QueryAsync<int>("[shUser].[SelectIdEmploye]", parameters, commandType: CommandType.StoredProcedure);
+            var id = await _connection.QueryAsync<int>("[shUser].[SelectIdEmploye]", parameters, commandType: CommandType.StoredProcedure);
             return id.FirstOrDefault();
         }
     }
