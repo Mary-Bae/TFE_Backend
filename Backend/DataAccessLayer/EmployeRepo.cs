@@ -11,11 +11,13 @@ namespace DataAccessLayer
     {
         private readonly IDbConnection _connection;
         private readonly IDbConnection _connectManager;
+        private readonly IDbConnection _connectAdmin;
 
         public EmployeRepo(IDbChoixConnRepo connection)
         {
             _connection = connection.CreateConnection("ConnectDb");
             _connectManager = connection.CreateConnection("ConnectDbManager");
+            _connectAdmin = connection.CreateConnection("ConnectDbAdmin");
         }
         public async Task<T?> GetMailManagerByUser<T>(string auth0Id)
         {
@@ -48,6 +50,18 @@ namespace DataAccessLayer
 
                 var eMail = await _connectManager.QueryAsync<T>("[shManager].[SelectMailEmploye]", parameters, commandType: CommandType.StoredProcedure);
                 return eMail.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
+        public async Task<List<T>> GetUsers<T>()
+        {
+            try
+            {
+                var users = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectUsers]", commandType: CommandType.StoredProcedure);
+                return users.ToList();
             }
             catch (Exception ex)
             {

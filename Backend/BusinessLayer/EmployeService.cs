@@ -20,5 +20,11 @@ namespace BusinessLayer
             return await _employeRepo.GetMailByDemande<T>(demId);
         }
 
+        public async Task<List<T>> GetUsers<T>()
+        {
+            return await _employeRepo.GetUsers<T>();
+
+        }
+
     }
 }
