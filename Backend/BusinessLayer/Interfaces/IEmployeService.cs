@@ -4,5 +4,6 @@
     {
         Task<T?> GetMailManagerByUser<T>(string auth0Id);
         Task<T?> GetMailByDemande<T>(int demId);
+        Task<List<T>> GetUsers<T>();
     }
 }

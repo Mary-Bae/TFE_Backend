@@ -55,5 +55,23 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Policy = "administrator")]
+        [HttpGet("GetUsers")]
+        public async Task<IActionResult> GetUsers()
+        {
+            try
+            {
+                var users = await _employeService.GetUsers<EmployeDTO>();
+                return Ok(users);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
