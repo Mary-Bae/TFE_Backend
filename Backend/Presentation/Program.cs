@@ -42,11 +42,13 @@ namespace Presentation
             builder.Services.AddScoped<ICompteurService, CompteurService>();
             builder.Services.AddScoped<IJoursFeriesService, JoursFeriesService>();
             builder.Services.AddScoped<IEmployeService, EmployeService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
 
             builder.Services.AddScoped<IDemandesRepo, DemandesRepo>();
             builder.Services.AddScoped<ICompteurRepo, CompteurRepo>();
             builder.Services.AddScoped<IJoursFeriesRepo, JoursFeriesRepo>();
             builder.Services.AddScoped<IEmployeRepo, EmployeRepo>();
+            builder.Services.AddScoped<IRoleRepo, RoleRepo>();
 
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
