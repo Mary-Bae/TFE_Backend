@@ -10,5 +10,6 @@ namespace Interfaces
     public interface IAuthService
     {
         string GetUserAuth0Id(ClaimsPrincipal user);
+        Task<string> GetManagementApiToken();
     }
 }

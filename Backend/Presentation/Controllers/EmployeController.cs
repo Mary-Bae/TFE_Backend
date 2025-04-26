@@ -73,5 +73,20 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Policy = "administrator")]
+        [HttpPost("CreateUser")]
+        public async Task<IActionResult> CreateUser(EmployeDTO employe)
+        {
+            try
+            {
+                var bearerToken = Request.Headers["Authorization"].ToString();
+                var createdUser = await _employeService.CreateUser(employe);
+                return Ok(createdUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

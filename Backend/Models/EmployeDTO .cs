@@ -16,6 +16,8 @@ namespace Models
         public string? EMP_Pren2 { get; set; }
         [JsonPropertyName("EMP_Sexe")]
         public string? EMP_Sexe { get; set; }
+        [JsonPropertyName("EMP_ROL_id")]
+        public int EMP_ROL_id { get; set; }
         [JsonPropertyName("EMP_Email")]
         public string? EMP_Email { get; set; }
         [JsonPropertyName("EMP_Auth")]
@@ -24,5 +26,7 @@ namespace Models
         public string? ROL_Libelle { get; set; }
         [JsonPropertyName("EMP_Manager")]
         public string? EMP_Manager { get; set; }
+        [JsonPropertyName("EMP_Manager_id")]
+        public int EMP_Manager_id { get; set; }
     }
 }

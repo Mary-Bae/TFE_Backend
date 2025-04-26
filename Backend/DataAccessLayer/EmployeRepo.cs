@@ -68,5 +68,27 @@ namespace DataAccessLayer
                 throw new DBConcurrencyException("Erreur: ", ex);
             }
         }
+        public async Task CreateUser(EmployeDTO employe)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Nom", employe.EMP_Nom);
+                parameters.Add("@Prenom", employe.EMP_Prenom);
+                parameters.Add("@Pren2", employe.EMP_Pren2);
+                parameters.Add("@Sexe", employe.EMP_Sexe);
+                parameters.Add("@Email", employe.EMP_Email);
+                parameters.Add("@Auth0Id", employe.EMP_Auth);
+                parameters.Add("@RoleId", employe.EMP_ROL_id);
+                parameters.Add("@ManagerId", employe.EMP_Manager_id == 0 ? null : employe.EMP_Manager_id);
+
+                await _connectAdmin.ExecuteAsync("[shAdmin].[CreateUser]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
+            
+        }
     }
 }
