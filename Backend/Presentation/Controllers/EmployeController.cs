@@ -103,5 +103,43 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Policy = "administrator")]
+        [HttpPut("UpdateEmploye")]
+        public async Task<IActionResult> UpdateEmploye(int id, EmployeDTO employe)
+        {
+            try
+            {
+                var bearerToken = Request.Headers["Authorization"].ToString();
+                var employeUpdated = await _employeService.UpdateEmploye(id, employe);
+                return Ok(employeUpdated);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize(Policy = "administrator")]
+        [HttpGet("GetEmployeById")]
+        public async Task<IActionResult?> GetEmployeById(int id)
+        {
+            try
+            {
+                var employe = await _employeService.GetEmployeById<EmployeDTO>(id);
+                if (employe == null)
+                {
+                    return NotFound($"Aucun employe trouvée avec l'ID {id}");
+                }
+
+                return Ok(employe);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

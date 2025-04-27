@@ -10,6 +10,8 @@ namespace Interfaces
         Task<List<T>> GetUsers<T>();
         Task<List<T>> GetManagers<T>();
         Task CreateUser(EmployeDTO employe);
+        Task UpdateEmploye(int pId, EmployeDTO employe);
+        Task<T?> GetEmployeById<T>(int employeId);
 
     }
 }
