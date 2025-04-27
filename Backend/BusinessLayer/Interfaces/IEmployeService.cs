@@ -7,6 +7,7 @@ namespace Interfaces
         Task<T?> GetMailManagerByUser<T>(string auth0Id);
         Task<T?> GetMailByDemande<T>(int demId);
         Task<List<T>> GetUsers<T>();
+        Task<List<T>> GetManagers<T>();
         Task<EmployeDTO> CreateUser(EmployeDTO employe);
     }
 }

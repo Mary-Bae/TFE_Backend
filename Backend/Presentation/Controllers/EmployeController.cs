@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Interfaces;
 using Models;
+using BusinessLayer;
 
 namespace Presentation.Controllers
 {
@@ -67,6 +68,20 @@ namespace Presentation.Controllers
             catch (UnauthorizedAccessException ex)
             {
                 return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize(Policy = "administrator")]
+        [HttpGet("GetManagers")]
+        public async Task<IActionResult> GetManagers()
+        {
+            try
+            {
+                var lst = await _employeService.GetManagers<EmployeNomsDTO>();
+                return Ok(lst);
             }
             catch (Exception ex)
             {
