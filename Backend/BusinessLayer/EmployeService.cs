@@ -111,5 +111,75 @@ namespace BusinessLayer
             return employe;
         }
 
+        public async Task<EmployeDTO> UpdateEmploye(int pId, EmployeDTO employe)
+        {
+            //Récupération du token de mon API Management dans Auth0 (connecté à Machine-To-Machine)
+            var bearerToken = await _authService.GetManagementApiToken();
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
+
+            employe.EMP_Email = (employe.EMP_Nom + "." + employe.EMP_Prenom + "@gmail.com").ToLower();
+            if (!string.IsNullOrEmpty(employe.EMP_Sexe))
+            {
+                employe.EMP_Sexe = employe.EMP_Sexe.Trim().Substring(0, 1).ToUpper();
+
+                if (employe.EMP_Sexe != "F" && employe.EMP_Sexe != "M")
+                {
+                    throw new Exception("Sexe invalide : doit être F ou M.");
+                }
+            }
+
+            //Envoi de la requete pour faire un update de l'user dans Auth0
+            var payload = new
+            {
+                name = employe.EMP_Prenom + " " + employe.EMP_Nom,
+                email = employe.EMP_Email,
+                given_name = employe.EMP_Prenom,
+                family_name = employe.EMP_Nom
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+            var response = await client.PatchAsync($"https://dev-r0omvlrob02srgfr.us.auth0.com/api/v2/users/{employe.EMP_Auth}", content);
+            response.EnsureSuccessStatusCode();
+
+            //Modification du rôle dans Auth0 selon ce qu'on a sélectionné
+            string roleAuth0 = "";
+            switch (employe.EMP_ROL_id)
+            {
+                case 1:
+                    roleAuth0 = "rol_ToUSfkJn71LRxDQi"; // Identifiant du rôle Auth0 pour "Employé"
+                    break;
+                case 2:
+                    roleAuth0 = "rol_5YZuuMwk7lJC9EWh"; // Identifiant du rôle Auth0 pour "Manager"
+                    break;
+                case 3:
+                    roleAuth0 = "rol_ZJgssQPaESZIlVNX"; // Identifiant du rôle Auth0 pour "Admin"
+                    break;
+                case 4:
+                    roleAuth0 = "rol_VfXb1ZcRCmZbJG9c"; // Identifiant du rôle Auth0 pour "CEO"
+                    break;
+                default:
+                    throw new Exception("Role inconnu");
+            }
+            var assignRoleAuth0 = new
+            {
+                roles = new[] { roleAuth0 }
+            };
+
+            var assignRoleContent = new StringContent(JsonSerializer.Serialize(assignRoleAuth0), Encoding.UTF8, "application/json");
+
+            var assignRoleResponse = await client.PostAsync($"https://dev-r0omvlrob02srgfr.us.auth0.com/api/v2/users/{employe.EMP_Auth}/roles", assignRoleContent);
+            assignRoleResponse.EnsureSuccessStatusCode();
+
+            // Appel du repo pour modifier l'employé
+            await _employeRepo.UpdateEmploye(pId, employe);
+
+            return employe;
+        }
+        public async Task<T?> GetEmployeById<T>(int employeId)
+        {
+            return await _employeRepo.GetEmployeById<T>(employeId);
+        }
+
     }
 }

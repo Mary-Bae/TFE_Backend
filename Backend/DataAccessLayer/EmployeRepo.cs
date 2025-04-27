@@ -102,5 +102,41 @@ namespace DataAccessLayer
             }
             
         }
+        public async Task UpdateEmploye(int pId, EmployeDTO employe)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@EMP_id", pId);
+                parameters.Add("@EMP_Nom", employe.EMP_Nom);
+                parameters.Add("@EMP_Prenom", employe.EMP_Prenom);
+                parameters.Add("@EMP_Email", employe.EMP_Email);
+                parameters.Add("@EMP_ROL_id", employe.EMP_ROL_id);
+                parameters.Add("@EMP_Pren2", employe.EMP_Pren2);
+                parameters.Add("@EMP_Sexe", employe.EMP_Sexe);
+                parameters.Add("@EMP_Manager_id", employe.EMP_Manager_id);
+
+                await _connectAdmin.ExecuteAsync("[shAdmin].[UpdateEmploye]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur : ", ex);
+            }
+        }
+        public async Task<T?> GetEmployeById<T>(int employeId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@EMP_id", employeId);
+
+                var employe = await _connectAdmin.QuerySingleOrDefaultAsync<T>("[shAdmin].[SelectEmployeById]", parameters, commandType: CommandType.StoredProcedure);
+                return employe;
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
     }
 }
