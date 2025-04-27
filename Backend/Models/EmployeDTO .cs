@@ -29,4 +29,11 @@ namespace Models
         [JsonPropertyName("EMP_Manager_id")]
         public int EMP_Manager_id { get; set; }
     }
+    public class EmployeNomsDTO
+    {
+        [JsonPropertyName("EMP_id")]
+        public int EMP_id { get; set; }
+        [JsonPropertyName("EMP_Nom")]
+        public string? EMP_Nom { get; set; }
+    }
 }

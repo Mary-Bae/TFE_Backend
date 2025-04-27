@@ -68,6 +68,18 @@ namespace DataAccessLayer
                 throw new DBConcurrencyException("Erreur: ", ex);
             }
         }
+        public async Task<List<T>> GetManagers<T>()
+        {
+            try
+            {
+                var managers = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectManagers]", commandType: CommandType.StoredProcedure);
+                return managers.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
         public async Task CreateUser(EmployeDTO employe)
         {
             try
