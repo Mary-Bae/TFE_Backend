@@ -180,6 +180,10 @@ namespace BusinessLayer
         {
             return await _employeRepo.GetEmployeById<T>(employeId);
         }
+        public async Task DeleteEmploye(int pId)
+        {
+            await _employeRepo.DeleteEmploye(pId);
+        }
 
     }
 }

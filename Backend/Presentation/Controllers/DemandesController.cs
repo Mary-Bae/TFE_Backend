@@ -124,7 +124,6 @@ namespace Presentation.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
         [Authorize(Policy = "Manager")]
         [HttpGet("GetDemandesEquipe")]
