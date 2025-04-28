@@ -141,5 +141,20 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Policy = "administrator")]
+        [HttpDelete("DelEmploye")]
+        public async Task<IActionResult> DeleteEmploye(int id)
+        {
+            try
+            {
+                await _employeService.DeleteEmploye(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

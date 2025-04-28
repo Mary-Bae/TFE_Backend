@@ -100,7 +100,6 @@ namespace DataAccessLayer
             {
                 throw new DBConcurrencyException("Erreur: ", ex);
             }
-            
         }
         public async Task UpdateEmploye(int pId, EmployeDTO employe)
         {
@@ -136,6 +135,21 @@ namespace DataAccessLayer
             catch (Exception ex)
             {
                 throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
+        public async Task DeleteEmploye(int pId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@EMP_id", pId);
+
+                await _connectAdmin.ExecuteAsync("[shAdmin].[DeleteEmploye]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur : ", ex);
+
             }
         }
     }
