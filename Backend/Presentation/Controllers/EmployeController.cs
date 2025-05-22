@@ -156,5 +156,21 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        public async Task<IActionResult> GetAbsences()
+        {
+            try
+            {
+                var absences = await _employeService.GetAbsences<AbsenceDTO>();
+                return Ok(absences);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

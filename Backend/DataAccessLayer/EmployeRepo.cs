@@ -152,5 +152,17 @@ namespace DataAccessLayer
 
             }
         }
+        public async Task<List<T>> GetAbsences<T>()
+        {
+            try
+            {
+                var absences = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectTypeAbsence]", commandType: CommandType.StoredProcedure);
+                return absences.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
     }
 }
