@@ -34,7 +34,7 @@ namespace BusinessLayer
         {
             decimal duree = 0;
 
-            switch (demande.TypeJournee)
+            switch (demande.DEM_TypeJournee)
             {
                 case "Journee":
                     duree = 8;
@@ -55,7 +55,7 @@ namespace BusinessLayer
         {
             decimal duree = 0;
 
-            switch (demande.TypeJournee)
+            switch (demande.DEM_TypeJournee)
             {
                 case "Journee":
                     duree = 8;

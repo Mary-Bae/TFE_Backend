@@ -61,6 +61,7 @@ namespace DataAccessLayer
                 parameters.Add("@DEM_TYPE_id", demande.DEM_TYPE_id);
                 parameters.Add("@DEM_Justificatif", demande.DEM_Justificatif);
                 parameters.Add("@DEM_DureeHeures", duree);
+                parameters.Add("@DEM_TypeJournee", demande.DEM_TypeJournee);
 
                 await _connection.ExecuteAsync("[shUser].[AddDemande]", parameters, commandType: CommandType.StoredProcedure);
             }
@@ -96,6 +97,7 @@ namespace DataAccessLayer
                 parameters.Add("@DEM_TYPE_id", demande.DEM_TYPE_id);
                 parameters.Add("@DEM_Justificatif", demande.DEM_Justificatif);
                 parameters.Add("@DEM_DureeHeures", duree);
+                parameters.Add("@DEM_TypeJournee", demande.DEM_TypeJournee);
 
                 await _connection.ExecuteAsync("[shUser].[UpdateDemande]", parameters, commandType: CommandType.StoredProcedure);
             }
