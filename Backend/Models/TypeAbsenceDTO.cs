@@ -20,4 +20,11 @@ namespace Models
         public decimal TAEM_Heures { get; set; }
        
     }
+    public class AbsenceDTO
+    {
+        [JsonPropertyName("TYPE_id")]
+        public int TYPE_id { get; set; }
+        [JsonPropertyName("TYPE_Libelle")]
+        public string? TYPE_Libelle { get; set; }
+    }
 }
