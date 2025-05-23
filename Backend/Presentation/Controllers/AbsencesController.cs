@@ -54,5 +54,19 @@ namespace Presentation.Controllers
             }
 
         }
+        [Authorize(Policy = "administrator")]
+        [HttpPost("AjoutAbsence")]
+        public async Task<IActionResult> AjoutAbsence(TypeAbsenceDTO absence, int employeId, decimal jours)
+        {
+            try
+            {
+                await _absencesService.AddAbsence(absence, employeId, jours);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

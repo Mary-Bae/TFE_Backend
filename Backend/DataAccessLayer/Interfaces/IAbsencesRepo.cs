@@ -6,5 +6,6 @@ namespace Interfaces
     {
         Task<List<T>> GetAbsences<T>();
         Task<List<T>> GetAbsencesByEmployeId<T>(int employeId);
+        Task AddAbsence(TypeAbsenceDTO absence, int employeId);
     }
 }

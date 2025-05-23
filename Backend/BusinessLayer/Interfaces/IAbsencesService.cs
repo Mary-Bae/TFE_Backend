@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace Interfaces
     {
         Task<List<T>> GetAbsences<T>();
         Task<List<T>> GetAbsencesByEmployeId<T>(int employeId);
+        Task AddAbsence(TypeAbsenceDTO absence, int employeId, decimal jours);
     }
 }

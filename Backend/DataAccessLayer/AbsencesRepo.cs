@@ -42,6 +42,23 @@ namespace DataAccessLayer
                 throw new DBConcurrencyException("Erreur: ", ex);
             }
         }
+        public async Task AddAbsence(TypeAbsenceDTO absence, int employeId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@EMP_id", employeId);
+                parameters.Add("@TYPE_id", absence.TAEM_TYPE_id);
+                parameters.Add("@TAEM_NbrJoursAn", absence.TAEM_NbrJoursAn);
+                parameters.Add("@TAEM_NbrJoursSemaine", absence.TAEM_NbrJoursSemaine);
+
+                await _connectAdmin.ExecuteAsync("[shAdmin].[AddAbsence]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
 
     }
 }

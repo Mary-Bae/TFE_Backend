@@ -20,5 +20,20 @@ namespace BusinessLayer
         {
             return await _absencesRepo.GetAbsencesByEmployeId<T>(employeId);
         }
+        public async Task AddAbsence(TypeAbsenceDTO absence, int employeId, decimal jours)
+        {
+
+            if (absence.TAEM_TYPE_id == 2) 
+            {
+                absence.TAEM_NbrJoursSemaine = jours;
+            }
+            else
+            {
+                absence.TAEM_NbrJoursAn = jours;
+            }
+
+            await _absencesRepo.AddAbsence(absence, employeId);
+        }
+
     }
 }
