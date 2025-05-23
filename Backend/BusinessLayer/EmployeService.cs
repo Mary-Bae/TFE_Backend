@@ -184,10 +184,6 @@ namespace BusinessLayer
         {
             await _employeRepo.DeleteEmploye(pId);
         }
-        public async Task<List<T>> GetAbsences<T>()
-        {
-            return await _employeRepo.GetAbsences<T>();
-        }
 
     }
 }

@@ -12,6 +12,5 @@ namespace Interfaces
         Task<EmployeDTO> UpdateEmploye(int pId, EmployeDTO employe);
         Task<T?> GetEmployeById<T>(int employeId);
         Task DeleteEmploye(int pId);
-        Task<List<T>> GetAbsences<T>();
     }
 }
