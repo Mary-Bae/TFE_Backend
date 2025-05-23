@@ -34,6 +34,24 @@ namespace BusinessLayer
 
             await _absencesRepo.AddAbsence(absence, employeId);
         }
+        public async Task UpdAbsence(TypeAbsenceDTO absence, int employeId, decimal jours)
+        {
+
+            if (absence.TAEM_TYPE_id == 2)
+            {
+                absence.TAEM_NbrJoursSemaine = jours;
+            }
+            else
+            {
+                absence.TAEM_NbrJoursAn = jours;
+            }
+
+            await _absencesRepo.UpdAbsence(absence, employeId);
+        }
+        public async Task DeleteAbsence(int pId)
+        {
+            await _absencesRepo.DeleteAbsence(pId);
+        }
 
     }
 }

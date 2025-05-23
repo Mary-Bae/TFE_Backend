@@ -4,6 +4,7 @@ using Interfaces;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Models;
+using System.Data.Common;
 
 namespace DataAccessLayer
 {
@@ -57,6 +58,38 @@ namespace DataAccessLayer
             catch (Exception ex)
             {
                 throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
+        public async Task UpdAbsence(TypeAbsenceDTO absence, int employeId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@EMP_id", employeId);
+                parameters.Add("@TYPE_id", absence.TAEM_TYPE_id);
+                parameters.Add("@TAEM_NbrJoursAn", absence.TAEM_NbrJoursAn);
+                parameters.Add("@TAEM_NbrJoursSemaine", absence.TAEM_NbrJoursSemaine);
+
+                await _connectAdmin.ExecuteAsync("[shAdmin].[UpdateAbsence]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new DBConcurrencyException("Erreur: ", ex);
+            }
+        }
+        public async Task DeleteAbsence(int pId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", pId);
+
+                await _connectAdmin.ExecuteAsync("[shAdmin].[DeleteAbsence]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur : ", ex);
+
             }
         }
 

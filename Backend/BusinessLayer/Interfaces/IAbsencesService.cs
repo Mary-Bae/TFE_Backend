@@ -12,5 +12,7 @@ namespace Interfaces
         Task<List<T>> GetAbsences<T>();
         Task<List<T>> GetAbsencesByEmployeId<T>(int employeId);
         Task AddAbsence(TypeAbsenceDTO absence, int employeId, decimal jours);
+        Task UpdAbsence(TypeAbsenceDTO absence, int employeId, decimal jours);
+        Task DeleteAbsence(int pId);
     }
 }

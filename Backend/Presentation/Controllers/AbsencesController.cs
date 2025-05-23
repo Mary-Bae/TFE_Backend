@@ -68,5 +68,34 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Policy = "administrator")]
+        [HttpPut("UpdateAbsence")]
+        public async Task<IActionResult> UpdateAbsence(TypeAbsenceDTO absence, int employeId, decimal jours)
+        {
+            try
+            {
+                await _absencesService.UpdAbsence(absence, employeId, jours);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize(Policy = "administrator")]
+        [HttpDelete("DelAbsence")]
+        public async Task<IActionResult> DelAbsence(int id)
+        {
+            try
+            {
+                await _absencesService.DeleteAbsence(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
