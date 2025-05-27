@@ -6,6 +6,7 @@ using System.Reflection.Metadata;
 using Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
+using CustomErrors;
 
 namespace DataAccessLayer
 {
@@ -31,7 +32,7 @@ namespace DataAccessLayer
             }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task<List<T>> GetTypeAbsByUser<T>(string auth0Id)
@@ -46,7 +47,7 @@ namespace DataAccessLayer
             }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task AddDemandeAbs(AddAndUpdDemandeDTO demande, string auth0Id, decimal duree)
@@ -65,9 +66,21 @@ namespace DataAccessLayer
 
                 await _connection.ExecuteAsync("[shUser].[AddDemande]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                if (ex.Message == "JourPassé")
+                    throw new CustomError(ErreurCodeEnum.DemandesPassé, ex);
+                if (ex.Message == "DatesSimilaires")
+                    throw new CustomError(ErreurCodeEnum.DatesSimilaires, ex);
+                if (ex.Message == "SoldeNotExists")
+                    throw new CustomError(ErreurCodeEnum.SoldeInexistant, ex);
+                if (ex.Message == "HeuresRestant")
+                    throw new CustomError(ErreurCodeEnum.HeuresRestant, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task<T?> GetDemandeById<T>(int demandeId)
@@ -82,7 +95,7 @@ namespace DataAccessLayer
             }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task UpdateDemande(int pId, AddAndUpdDemandeDTO demande, decimal duree)
@@ -101,9 +114,23 @@ namespace DataAccessLayer
 
                 await _connection.ExecuteAsync("[shUser].[UpdateDemande]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                if(ex.Message == "PasEnAttente")
+                    throw new CustomError(ErreurCodeEnum.ModifierDemEnAttente, ex);
+                if (ex.Message == "JourPassé")
+                    throw new CustomError(ErreurCodeEnum.DemandesPassé, ex);
+                if (ex.Message == "DatesSimilaires")
+                    throw new CustomError(ErreurCodeEnum.DatesSimilaires, ex);
+                if (ex.Message == "SoldeNotExists")
+                    throw new CustomError(ErreurCodeEnum.SoldeInexistant, ex);
+                if (ex.Message == "HeuresRestant")
+                    throw new CustomError(ErreurCodeEnum.HeuresRestant, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception("Erreur : ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task DeleteDemande(int pId)
@@ -115,10 +142,15 @@ namespace DataAccessLayer
 
                 await _connection.ExecuteAsync("[shUser].[DeleteDemande]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                if (ex.Message == "PasEnAttente")
+                    throw new CustomError(ErreurCodeEnum.ModifierDemEnAttente, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception("Erreur : ", ex);
-
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task<List<T>> GetDemandesEquipe<T>(int managerId)
@@ -133,7 +165,7 @@ namespace DataAccessLayer
             }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task UpdStatusDemande(int pId, int pStatut)
@@ -145,9 +177,13 @@ namespace DataAccessLayer
                 parameters.Add("@Statut", pStatut);
                 await _connectManager.ExecuteAsync("[shManager].[AcceptRefusDemandes]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception("Erreur : ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
 

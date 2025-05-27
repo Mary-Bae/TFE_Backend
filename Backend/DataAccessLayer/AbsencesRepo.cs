@@ -5,6 +5,8 @@ using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Models;
 using System.Data.Common;
+using Microsoft.Data.SqlClient;
+using CustomErrors;
 
 namespace DataAccessLayer
 {
@@ -18,30 +20,16 @@ namespace DataAccessLayer
         }
         public async Task<List<T>> GetAbsences<T>()
         {
-            try
-            {
                 var absences = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectTypeAbsence]", commandType: CommandType.StoredProcedure);
                 return absences.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new DBConcurrencyException("Erreur: ", ex);
-            }
         }
         public async Task<List<T>> GetAbsencesByEmployeId<T>(int employeId)
         {
-            try
-            {
                 var parameters = new DynamicParameters();
                 parameters.Add("@EMP_id", employeId);
 
                 var employe = await _connectAdmin.QueryAsync<T>("[shAdmin].[AbsencesByEmployeId]", parameters, commandType: CommandType.StoredProcedure);
                 return employe.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new DBConcurrencyException("Erreur: ", ex);
-            }
         }
         public async Task AddAbsence(TypeAbsenceDTO absence, int employeId)
         {
@@ -57,7 +45,7 @@ namespace DataAccessLayer
             }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task UpdAbsence(TypeAbsenceDTO absence, int employeId)
@@ -74,7 +62,7 @@ namespace DataAccessLayer
             }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task DeleteAbsence(int pId)
@@ -86,10 +74,15 @@ namespace DataAccessLayer
 
                 await _connectAdmin.ExecuteAsync("[shAdmin].[DeleteAbsence]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                if (ex.Message == "DemandesExists")
+                    throw new CustomError(ErreurCodeEnum.DemandesExistantes, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception("Erreur : ", ex);
-
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
 

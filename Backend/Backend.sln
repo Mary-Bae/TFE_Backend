@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{CF91BEEC-0861-4390-990A-CDF61AAF7F43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomErrors", "CustomErrors\CustomErrors.csproj", "{9B616F20-4240-4A0E-9621-A394C166E4D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{CF91BEEC-0861-4390-990A-CDF61AAF7F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF91BEEC-0861-4390-990A-CDF61AAF7F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF91BEEC-0861-4390-990A-CDF61AAF7F43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B616F20-4240-4A0E-9621-A394C166E4D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B616F20-4240-4A0E-9621-A394C166E4D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B616F20-4240-4A0E-9621-A394C166E4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B616F20-4240-4A0E-9621-A394C166E4D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
