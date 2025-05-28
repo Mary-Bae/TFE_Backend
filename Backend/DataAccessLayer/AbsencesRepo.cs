@@ -43,6 +43,10 @@ namespace DataAccessLayer
 
                 await _connectAdmin.ExecuteAsync("[shAdmin].[AddAbsence]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
                 throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
@@ -60,6 +64,10 @@ namespace DataAccessLayer
 
                 await _connectAdmin.ExecuteAsync("[shAdmin].[UpdateAbsence]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
                 throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
@@ -76,7 +84,7 @@ namespace DataAccessLayer
             }
             catch (SqlException ex)
             {
-                if (ex.Message == "DemandesExists")
+                if (ex.Message.StartsWith ("[ABS01]"))
                     throw new CustomError(ErreurCodeEnum.DemandesExistantes, ex);
                 throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
             }

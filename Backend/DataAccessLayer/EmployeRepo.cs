@@ -4,6 +4,8 @@ using Interfaces;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Models;
+using CustomErrors;
+using Microsoft.Data.SqlClient;
 
 namespace DataAccessLayer
 {
@@ -29,9 +31,15 @@ namespace DataAccessLayer
                var eMail =  await _connection.QueryAsync<T>("[shUser].[SelectMailManager]", parameters, commandType: CommandType.StoredProcedure);
                 return eMail.FirstOrDefault();
             }
+            catch (SqlException ex)
+            {
+                if (ex.Message.StartsWith("[EMP01]"))
+                    throw new CustomError(ErreurCodeEnum.SuperieurInexistant, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task<int> GetManagerId(string auth0Id)
@@ -51,9 +59,13 @@ namespace DataAccessLayer
                 var eMail = await _connectManager.QueryAsync<T>("[shManager].[SelectMailEmploye]", parameters, commandType: CommandType.StoredProcedure);
                 return eMail.FirstOrDefault();
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task<List<T>> GetUsers<T>()
@@ -63,9 +75,13 @@ namespace DataAccessLayer
                 var users = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectUsers]", commandType: CommandType.StoredProcedure);
                 return users.ToList();
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task<List<T>> GetManagers<T>()
@@ -75,9 +91,13 @@ namespace DataAccessLayer
                 var managers = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectManagers]", commandType: CommandType.StoredProcedure);
                 return managers.ToList();
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task CreateUser(EmployeDTO employe)
@@ -96,9 +116,13 @@ namespace DataAccessLayer
 
                 await _connectAdmin.ExecuteAsync("[shAdmin].[CreateUser]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task UpdateEmploye(int pId, EmployeDTO employe)
@@ -117,9 +141,13 @@ namespace DataAccessLayer
 
                 await _connectAdmin.ExecuteAsync("[shAdmin].[UpdateEmploye]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception("Erreur : ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task<T?> GetEmployeById<T>(int employeId)
@@ -132,9 +160,13 @@ namespace DataAccessLayer
                 var employe = await _connectAdmin.QuerySingleOrDefaultAsync<T>("[shAdmin].[SelectEmployeById]", parameters, commandType: CommandType.StoredProcedure);
                 return employe;
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
         public async Task DeleteEmploye(int pId)
@@ -146,10 +178,15 @@ namespace DataAccessLayer
 
                 await _connectAdmin.ExecuteAsync("[shAdmin].[DeleteEmploye]", parameters, commandType: CommandType.StoredProcedure);
             }
+            catch (SqlException ex)
+            {
+                if (ex.Message.StartsWith("[EMP02]"))
+                    throw new CustomError(ErreurCodeEnum.SuppressionEchouée, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception("Erreur : ", ex);
-
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
     }

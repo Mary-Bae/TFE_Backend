@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using DataAccessLayer;
+using CustomErrors;
 
 namespace BusinessLayer
 {
@@ -46,7 +47,7 @@ namespace BusinessLayer
 
                 if (employe.EMP_Sexe != "F" && employe.EMP_Sexe != "M")
                 {
-                    throw new Exception("Sexe invalide : doit être F ou M.");
+                    throw new CustomError(ErreurCodeEnum.SexeInvalide);
                 }
             }
 
@@ -90,7 +91,7 @@ namespace BusinessLayer
                     roleAuth0 = "rol_VfXb1ZcRCmZbJG9c"; // Identifiant du rôle Auth0 pour "CEO"
                     break;
                 default:
-                    throw new Exception("Role inconnu");
+                    throw new CustomError(ErreurCodeEnum.RoleInconnu);
             }
             var assignRoleAuth0 = new
                 {
@@ -125,7 +126,7 @@ namespace BusinessLayer
 
                 if (employe.EMP_Sexe != "F" && employe.EMP_Sexe != "M")
                 {
-                    throw new Exception("Sexe invalide : doit être F ou M.");
+                    throw new CustomError(ErreurCodeEnum.SexeInvalide);
                 }
             }
 
@@ -159,7 +160,7 @@ namespace BusinessLayer
                     roleAuth0 = "rol_VfXb1ZcRCmZbJG9c"; // Identifiant du rôle Auth0 pour "CEO"
                     break;
                 default:
-                    throw new Exception("Role inconnu");
+                    throw new CustomError(ErreurCodeEnum.RoleInconnu);
             }
             var assignRoleAuth0 = new
             {

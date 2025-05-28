@@ -5,6 +5,8 @@ using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Models;
 using Microsoft.AspNetCore.Connections;
+using CustomErrors;
+using Microsoft.Data.SqlClient;
 
 namespace DataAccessLayer
 {
@@ -26,9 +28,13 @@ namespace DataAccessLayer
                 var lst = await _connection.QueryAsync<T>("[shUser].[SelectCompteur]", parameters, commandType: CommandType.StoredProcedure);
                 return lst.ToList();
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
-                throw new DBConcurrencyException("Erreur: ", ex);
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
     }

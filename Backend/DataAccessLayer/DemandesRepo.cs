@@ -30,6 +30,10 @@ namespace DataAccessLayer
                 var lst = await _connection.QueryAsync<T>("[shUser].[SelectDemandeByUser]", parameters, commandType: CommandType.StoredProcedure);
                 return lst.ToList();
             }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
             catch (Exception ex)
             {
                 throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
@@ -44,6 +48,10 @@ namespace DataAccessLayer
 
                 var lst = await _connection.QueryAsync<T>("[shUser].[TypeAbsenceByUser]", parameters, commandType: CommandType.StoredProcedure);
                 return lst.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
             }
             catch (Exception ex)
             {
@@ -68,13 +76,13 @@ namespace DataAccessLayer
             }
             catch (SqlException ex)
             {
-                if (ex.Message == "JourPassé")
+                if (ex.Message.StartsWith("[DEM01]"))
                     throw new CustomError(ErreurCodeEnum.DemandesPassé, ex);
-                if (ex.Message == "DatesSimilaires")
+                if (ex.Message.StartsWith("[DEM02]"))
                     throw new CustomError(ErreurCodeEnum.DatesSimilaires, ex);
-                if (ex.Message == "SoldeNotExists")
+                if (ex.Message.StartsWith("[DEM03]"))
                     throw new CustomError(ErreurCodeEnum.SoldeInexistant, ex);
-                if (ex.Message == "HeuresRestant")
+                if (ex.Message.StartsWith("[DEM04]"))
                     throw new CustomError(ErreurCodeEnum.HeuresRestant, ex);
                 throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
             }
@@ -92,6 +100,10 @@ namespace DataAccessLayer
 
                 var demande = await _connection.QuerySingleOrDefaultAsync<T>("[shUser].[SelectDemandeById]", parameters, commandType: CommandType.StoredProcedure);
                 return demande;
+            }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
             }
             catch (Exception ex)
             {
@@ -116,15 +128,15 @@ namespace DataAccessLayer
             }
             catch (SqlException ex)
             {
-                if(ex.Message == "PasEnAttente")
+                if(ex.Message.StartsWith("[DEM05]"))
                     throw new CustomError(ErreurCodeEnum.ModifierDemEnAttente, ex);
-                if (ex.Message == "JourPassé")
+                if (ex.Message.StartsWith("[DEM01]"))
                     throw new CustomError(ErreurCodeEnum.DemandesPassé, ex);
-                if (ex.Message == "DatesSimilaires")
+                if (ex.Message.StartsWith("[DEM02]"))
                     throw new CustomError(ErreurCodeEnum.DatesSimilaires, ex);
-                if (ex.Message == "SoldeNotExists")
+                if (ex.Message.StartsWith("[DEM03]"))
                     throw new CustomError(ErreurCodeEnum.SoldeInexistant, ex);
-                if (ex.Message == "HeuresRestant")
+                if (ex.Message.StartsWith("[DEM04]"))
                     throw new CustomError(ErreurCodeEnum.HeuresRestant, ex);
                 throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
             }
@@ -144,7 +156,7 @@ namespace DataAccessLayer
             }
             catch (SqlException ex)
             {
-                if (ex.Message == "PasEnAttente")
+                if (ex.Message.StartsWith("[DEM05]"))
                     throw new CustomError(ErreurCodeEnum.ModifierDemEnAttente, ex);
                 throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
             }
@@ -162,6 +174,10 @@ namespace DataAccessLayer
 
                 var lst = await _connectManager.QueryAsync<T>("[shManager].[SelectDemandesEquipe]", parameters, commandType: CommandType.StoredProcedure);
                 return lst.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
             }
             catch (Exception ex)
             {
