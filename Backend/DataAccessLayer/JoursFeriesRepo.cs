@@ -18,15 +18,8 @@ namespace DataAccessLayer
         }
         public async Task<List<T>> GetJoursFeries<T>()
         {
-            try
-            {
-                var lst = await _connection.QueryAsync<T>("[shUser].[SelectJoursFeries]", commandType: CommandType.StoredProcedure);
+            var lst = await _connection.QueryAsync<T>("[shUser].[SelectJoursFeries]", commandType: CommandType.StoredProcedure);
             return lst.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new DBConcurrencyException("Erreur: ", ex);
-            }
         }
 
     }

@@ -4,6 +4,8 @@ using System.Text.Json;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using DataAccessLayer;
+using CustomErrors;
+using Microsoft.Data.SqlClient;
 
 namespace BusinessLayer
 {
@@ -18,11 +20,36 @@ namespace BusinessLayer
         }
         public async Task<T?> GetMailManagerByUser<T>(string auth0Id)
         {
-            return await _employeRepo.GetMailManagerByUser<T>(auth0Id);
+            try
+            {
+                return await _employeRepo.GetMailManagerByUser<T>(auth0Id);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.StartsWith("[EMP01]"))
+                    throw new CustomError(ErreurCodeEnum.SuperieurInexistant, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
+            }
+
         }
         public async Task<T?> GetMailByDemande<T>(int demId)
         {
-            return await _employeRepo.GetMailByDemande<T>(demId);
+            try
+            {
+                return await _employeRepo.GetMailByDemande<T>(demId);
+            }
+            catch (SqlException ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
+            }
         }
         public async Task<List<T>> GetUsers<T>()
         {
@@ -46,7 +73,7 @@ namespace BusinessLayer
 
                 if (employe.EMP_Sexe != "F" && employe.EMP_Sexe != "M")
                 {
-                    throw new Exception("Sexe invalide : doit être F ou M.");
+                    throw new CustomError(ErreurCodeEnum.SexeInvalide);
                 }
             }
 
@@ -90,7 +117,7 @@ namespace BusinessLayer
                     roleAuth0 = "rol_VfXb1ZcRCmZbJG9c"; // Identifiant du rôle Auth0 pour "CEO"
                     break;
                 default:
-                    throw new Exception("Role inconnu");
+                    throw new CustomError(ErreurCodeEnum.RoleInconnu);
             }
             var assignRoleAuth0 = new
                 {
@@ -125,7 +152,7 @@ namespace BusinessLayer
 
                 if (employe.EMP_Sexe != "F" && employe.EMP_Sexe != "M")
                 {
-                    throw new Exception("Sexe invalide : doit être F ou M.");
+                    throw new CustomError(ErreurCodeEnum.SexeInvalide);
                 }
             }
 
@@ -159,7 +186,7 @@ namespace BusinessLayer
                     roleAuth0 = "rol_VfXb1ZcRCmZbJG9c"; // Identifiant du rôle Auth0 pour "CEO"
                     break;
                 default:
-                    throw new Exception("Role inconnu");
+                    throw new CustomError(ErreurCodeEnum.RoleInconnu);
             }
             var assignRoleAuth0 = new
             {
@@ -182,8 +209,20 @@ namespace BusinessLayer
         }
         public async Task DeleteEmploye(int pId)
         {
-            await _employeRepo.DeleteEmploye(pId);
+            try
+            {
+                await _employeRepo.DeleteEmploye(pId);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.StartsWith("[EMP02]"))
+                    throw new CustomError(ErreurCodeEnum.SuppressionEchouée, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
+            }
         }
-
     }
 }

@@ -5,6 +5,8 @@ using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Models;
 using Microsoft.AspNetCore.Connections;
+using CustomErrors;
+using Microsoft.Data.SqlClient;
 
 namespace DataAccessLayer
 {
@@ -18,18 +20,11 @@ namespace DataAccessLayer
         }
         public async Task<List<T>> GetCompteurByUser<T>(string auth0Id)
         {
-            try
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@Auth0Id", auth0Id);
+            var parameters = new DynamicParameters();
+            parameters.Add("@Auth0Id", auth0Id);
 
-                var lst = await _connection.QueryAsync<T>("[shUser].[SelectCompteur]", parameters, commandType: CommandType.StoredProcedure);
-                return lst.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new DBConcurrencyException("Erreur: ", ex);
-            }
+            var lst = await _connection.QueryAsync<T>("[shUser].[SelectCompteur]", parameters, commandType: CommandType.StoredProcedure);
+            return lst.ToList();
         }
     }
 }

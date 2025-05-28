@@ -5,8 +5,6 @@ using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Models;
 using System.Data.Common;
-using Microsoft.Data.SqlClient;
-using CustomErrors;
 
 namespace DataAccessLayer
 {
@@ -33,57 +31,30 @@ namespace DataAccessLayer
         }
         public async Task AddAbsence(TypeAbsenceDTO absence, int employeId)
         {
-            try
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@EMP_id", employeId);
-                parameters.Add("@TYPE_id", absence.TAEM_TYPE_id);
-                parameters.Add("@TAEM_NbrJoursAn", absence.TAEM_NbrJoursAn);
-                parameters.Add("@TAEM_NbrJoursSemaine", absence.TAEM_NbrJoursSemaine);
+            var parameters = new DynamicParameters();
+            parameters.Add("@EMP_id", employeId);
+            parameters.Add("@TYPE_id", absence.TAEM_TYPE_id);
+            parameters.Add("@TAEM_NbrJoursAn", absence.TAEM_NbrJoursAn);
+            parameters.Add("@TAEM_NbrJoursSemaine", absence.TAEM_NbrJoursSemaine);
 
-                await _connectAdmin.ExecuteAsync("[shAdmin].[AddAbsence]", parameters, commandType: CommandType.StoredProcedure);
-            }
-            catch (Exception ex)
-            {
-                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
-            }
+            await _connectAdmin.ExecuteAsync("[shAdmin].[AddAbsence]", parameters, commandType: CommandType.StoredProcedure);
         }
         public async Task UpdAbsence(TypeAbsenceDTO absence, int employeId)
         {
-            try
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@EMP_id", employeId);
-                parameters.Add("@TYPE_id", absence.TAEM_TYPE_id);
-                parameters.Add("@TAEM_NbrJoursAn", absence.TAEM_NbrJoursAn);
-                parameters.Add("@TAEM_NbrJoursSemaine", absence.TAEM_NbrJoursSemaine);
+            var parameters = new DynamicParameters();
+            parameters.Add("@EMP_id", employeId);
+            parameters.Add("@TYPE_id", absence.TAEM_TYPE_id);
+            parameters.Add("@TAEM_NbrJoursAn", absence.TAEM_NbrJoursAn);
+            parameters.Add("@TAEM_NbrJoursSemaine", absence.TAEM_NbrJoursSemaine);
 
-                await _connectAdmin.ExecuteAsync("[shAdmin].[UpdateAbsence]", parameters, commandType: CommandType.StoredProcedure);
-            }
-            catch (Exception ex)
-            {
-                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
-            }
+            await _connectAdmin.ExecuteAsync("[shAdmin].[UpdateAbsence]", parameters, commandType: CommandType.StoredProcedure);
         }
         public async Task DeleteAbsence(int pId)
         {
-            try
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@id", pId);
+            var parameters = new DynamicParameters();
+            parameters.Add("@id", pId);
 
-                await _connectAdmin.ExecuteAsync("[shAdmin].[DeleteAbsence]", parameters, commandType: CommandType.StoredProcedure);
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Message == "DemandesExists")
-                    throw new CustomError(ErreurCodeEnum.DemandesExistantes, ex);
-                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
-            }
+            await _connectAdmin.ExecuteAsync("[shAdmin].[DeleteAbsence]", parameters, commandType: CommandType.StoredProcedure);
         }
 
     }

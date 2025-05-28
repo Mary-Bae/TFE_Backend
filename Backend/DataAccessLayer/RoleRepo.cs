@@ -17,15 +17,8 @@ namespace DataAccessLayer
         } 
         public async Task<List<T>> GetRoles<T>()
         {
-            try
-            {
                 var roles = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectRoles]", commandType: CommandType.StoredProcedure);
                 return roles.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new DBConcurrencyException("Erreur: ", ex);
-            }
         }
        
     }

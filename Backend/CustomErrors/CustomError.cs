@@ -11,6 +11,11 @@ namespace CustomErrors
         SoldeInexistant,
         HeuresRestant,
         ModifierDemEnAttente,
+        SuperieurInexistant,
+        SuppressionEchouée,
+        SexeInvalide,
+        RoleInconnu,
+        TypeJournee,
         ErreurSQL,
         ErreurGenerale
     }
@@ -55,6 +60,21 @@ namespace CustomErrors
                     break;
                 case ErreurCodeEnum.ModifierDemEnAttente:
                     _messageToReturn = "Impossible de modifier ou supprimer une demande qui n'est plus en attente.";
+                    break;
+                case ErreurCodeEnum.SuperieurInexistant:
+                    _messageToReturn = "Aucun supérieur trouvé pour cet employé.";
+                    break;
+                case ErreurCodeEnum.SuppressionEchouée:
+                    _messageToReturn = "La suppression de l''employé a échoué. Vérifiez les enregistrements liés (demandes, absences ou contrats).";
+                    break;
+                case ErreurCodeEnum.SexeInvalide:
+                    _messageToReturn = "Sexe invalide : doit être F (Féminin) ou M (Masculin).";
+                    break;
+                case ErreurCodeEnum.RoleInconnu:
+                    _messageToReturn = "Le rôle sélectionné n'existe pas dans Auth0. Veuillez vérifier dans l'interface Auth0";
+                    break;
+                case ErreurCodeEnum.TypeJournee:
+                    _messageToReturn = "Type de journée non valide.";
                     break;
                 case ErreurCodeEnum.ErreurSQL:
                     _messageToReturn = "Erreur liée à la base de données SQL.";
