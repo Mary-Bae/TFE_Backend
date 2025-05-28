@@ -1,5 +1,7 @@
-﻿using Interfaces;
+﻿using CustomErrors;
+using Interfaces;
 using Models;
+using Microsoft.Data.SqlClient;
 
 namespace BusinessLayer
 {
@@ -15,7 +17,7 @@ namespace BusinessLayer
         }
         public async Task<List<T>> GetDemandesByUser<T>(string auth0Id)
         {
-            return await _demandeRepo.GetDemandesByUser<T>(auth0Id);
+                return await _demandeRepo.GetDemandesByUser<T>(auth0Id);
         }
         public async Task<List<T>> GetDemandesEquipe<T>(string auth0Id)
         {
@@ -32,48 +34,102 @@ namespace BusinessLayer
         }
         public async Task AddDemandeAbs(AddAndUpdDemandeDTO demande, string auth0Id)
         {
-            decimal duree = 0;
-
-            switch (demande.DEM_TypeJournee)
+            try 
             {
-                case "Journee":
-                    duree = 8;
-                    break;
-                case "Matin":
-                    duree = 4;
-                    break;
-                case "Apres-midi":
-                    duree = 4;
-                    break;
-                default:
-                    throw new ArgumentException("Type de journée non valide.");
-            }
+                decimal duree = 0;
 
-            await _demandeRepo.AddDemandeAbs(demande, auth0Id, duree);
+                switch (demande.DEM_TypeJournee)
+                {
+                    case "Journee":
+                        duree = 8;
+                        break;
+                    case "Matin":
+                        duree = 4;
+                        break;
+                    case "Apres-midi":
+                        duree = 4;
+                        break;
+                    default:
+                        throw new CustomError(ErreurCodeEnum.TypeJournee);
+                }
+
+                await _demandeRepo.AddDemandeAbs(demande, auth0Id, duree);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.StartsWith("[DEM01]"))
+                    throw new CustomError(ErreurCodeEnum.DemandesPassé, ex);
+                if (ex.Message.StartsWith("[DEM02]"))
+                    throw new CustomError(ErreurCodeEnum.DatesSimilaires, ex);
+                if (ex.Message.StartsWith("[DEM03]"))
+                    throw new CustomError(ErreurCodeEnum.SoldeInexistant, ex);
+                if (ex.Message.StartsWith("[DEM04]"))
+                    throw new CustomError(ErreurCodeEnum.HeuresRestant, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
+            }
         }
         public async Task UpdateDemande(int pId, AddAndUpdDemandeDTO demande)
         {
-            decimal duree = 0;
-
-            switch (demande.DEM_TypeJournee)
+            try 
             {
-                case "Journee":
-                    duree = 8;
-                    break;
-                case "Matin":
-                    duree = 4;
-                    break;
-                case "Apres-midi":
-                    duree = 4;
-                    break;
-                default:
-                    throw new ArgumentException("Type de journée non valide.");
+                decimal duree = 0;
+
+                switch (demande.DEM_TypeJournee)
+                {
+                    case "Journee":
+                        duree = 8;
+                        break;
+                    case "Matin":
+                        duree = 4;
+                        break;
+                    case "Apres-midi":
+                        duree = 4;
+                        break;
+                    default:
+                        throw new CustomError(ErreurCodeEnum.TypeJournee);
+                }
+                await _demandeRepo.UpdateDemande(pId, demande, duree);
+
             }
-            await _demandeRepo.UpdateDemande(pId, demande, duree);
+            catch (SqlException ex)
+            {
+                if(ex.Message.StartsWith("[DEM05]"))
+                    throw new CustomError(ErreurCodeEnum.ModifierDemEnAttente, ex);
+                if (ex.Message.StartsWith("[DEM01]"))
+                    throw new CustomError(ErreurCodeEnum.DemandesPassé, ex);
+                if (ex.Message.StartsWith("[DEM02]"))
+                    throw new CustomError(ErreurCodeEnum.DatesSimilaires, ex);
+                if (ex.Message.StartsWith("[DEM03]"))
+                    throw new CustomError(ErreurCodeEnum.SoldeInexistant, ex);
+                if (ex.Message.StartsWith("[DEM04]"))
+                    throw new CustomError(ErreurCodeEnum.HeuresRestant, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
+            }
         }
         public async Task DeleteDemande(int pId)
         {
-            await _demandeRepo.DeleteDemande(pId);
+            try
+            {
+                await _demandeRepo.DeleteDemande(pId);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.StartsWith("[DEM05]"))
+                    throw new CustomError(ErreurCodeEnum.ModifierDemEnAttente, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
+            }
         }
         public async Task UpdStatusDemande(int pId, int pStatut)
         {

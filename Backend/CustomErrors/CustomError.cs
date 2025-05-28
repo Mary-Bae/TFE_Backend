@@ -15,6 +15,7 @@ namespace CustomErrors
         SuppressionEchouée,
         SexeInvalide,
         RoleInconnu,
+        TypeJournee,
         ErreurSQL,
         ErreurGenerale
     }
@@ -71,6 +72,9 @@ namespace CustomErrors
                     break;
                 case ErreurCodeEnum.RoleInconnu:
                     _messageToReturn = "Le rôle sélectionné n'existe pas dans Auth0. Veuillez vérifier dans l'interface Auth0";
+                    break;
+                case ErreurCodeEnum.TypeJournee:
+                    _messageToReturn = "Type de journée non valide.";
                     break;
                 case ErreurCodeEnum.ErreurSQL:
                     _messageToReturn = "Erreur liée à la base de données SQL.";

@@ -1,4 +1,5 @@
 ﻿using CustomErrors;
+using Microsoft.Data.SqlClient;
 using DataAccessLayer;
 using Interfaces;
 using Models;
@@ -54,8 +55,20 @@ namespace BusinessLayer
         }
         public async Task DeleteAbsence(int pId)
         {
-            await _absencesRepo.DeleteAbsence(pId);
+            try
+            {
+                await _absencesRepo.DeleteAbsence(pId);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.StartsWith("[ABS01]"))
+                    throw new CustomError(ErreurCodeEnum.DemandesExistantes, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
+            }
         }
-
     }
 }
