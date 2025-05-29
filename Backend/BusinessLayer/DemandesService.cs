@@ -65,7 +65,10 @@ namespace BusinessLayer
                     throw new CustomError(ErreurCodeEnum.SoldeInexistant, ex);
                 if (ex.Message.StartsWith("[DEM04]"))
                     throw new CustomError(ErreurCodeEnum.HeuresRestant, ex);
+                if (ex.Message.StartsWith("[DEM06]"))
+                    throw new CustomError(ErreurCodeEnum.HeuresHebdo, ex);
                 throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+
             }
             catch (Exception ex)
             {
@@ -107,6 +110,8 @@ namespace BusinessLayer
                     throw new CustomError(ErreurCodeEnum.SoldeInexistant, ex);
                 if (ex.Message.StartsWith("[DEM04]"))
                     throw new CustomError(ErreurCodeEnum.HeuresRestant, ex);
+                if (ex.Message.StartsWith("[DEM06]"))
+                    throw new CustomError(ErreurCodeEnum.HeuresHebdo, ex);
                 throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
             }
             catch (Exception ex)

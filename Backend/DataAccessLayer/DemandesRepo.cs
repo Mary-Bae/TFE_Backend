@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
 
 namespace DataAccessLayer
 {
