@@ -16,6 +16,7 @@ namespace CustomErrors
         SexeInvalide,
         RoleInconnu,
         TypeJournee,
+        HeuresHebdo,
         ErreurSQL,
         ErreurGenerale
     }
@@ -75,6 +76,9 @@ namespace CustomErrors
                     break;
                 case ErreurCodeEnum.TypeJournee:
                     _messageToReturn = "Type de journée non valide.";
+                    break;
+                case ErreurCodeEnum.HeuresHebdo:
+                    _messageToReturn = "Vous avez dépassé votre quota hebdomadaire autorisé.";
                     break;
                 case ErreurCodeEnum.ErreurSQL:
                     _messageToReturn = "Erreur liée à la base de données SQL.";
