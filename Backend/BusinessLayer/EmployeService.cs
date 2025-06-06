@@ -211,6 +211,25 @@ namespace BusinessLayer
         {
             try
             {
+                // Récupérer l'utilisateur en DB pour obtenir son ID Auth0
+                var employe = await _employeRepo.GetEmployeById<EmployeDTO>(pId);
+                if (!string.IsNullOrEmpty(employe?.EMP_Auth))
+                {
+                    // Supprimer dans Auth0
+                    var bearerToken = await _authService.GetManagementApiToken();
+                    using var client = new HttpClient();
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
+
+                    var response = await client.DeleteAsync(
+                        $"https://dev-r0omvlrob02srgfr.us.auth0.com/api/v2/users/{employe.EMP_Auth}"
+                    );
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new CustomError(ErreurCodeEnum.SuppressionAuth0Echouée);
+                    }
+                }
+
+                // Supprimer dans SQL
                 await _employeRepo.DeleteEmploye(pId);
             }
             catch (SqlException ex)

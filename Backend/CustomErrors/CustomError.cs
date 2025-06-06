@@ -13,6 +13,7 @@ namespace CustomErrors
         ModifierDemEnAttente,
         SuperieurInexistant,
         SuppressionEchouée,
+        SuppressionAuth0Echouée,
         SexeInvalide,
         RoleInconnu,
         TypeJournee,
@@ -67,6 +68,9 @@ namespace CustomErrors
                     break;
                 case ErreurCodeEnum.SuppressionEchouée:
                     _messageToReturn = "La suppression de l''employé a échoué. Vérifiez les enregistrements liés (demandes, absences ou contrats).";
+                    break;
+                case ErreurCodeEnum.SuppressionAuth0Echouée:
+                    _messageToReturn = "La suppression de l''employé a échoué. Vérifiez l'interface Auth0.";
                     break;
                 case ErreurCodeEnum.SexeInvalide:
                     _messageToReturn = "Sexe invalide : doit être F (Féminin) ou M (Masculin).";

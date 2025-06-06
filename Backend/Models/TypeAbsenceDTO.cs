@@ -13,9 +13,9 @@ namespace Models
         [JsonPropertyName("TYPE_Libelle")]
         public string? TYPE_Libelle { get; set; }
         [JsonPropertyName("TAEM_NbrJoursAn")]
-        public decimal TAEM_NbrJoursAn { get; set; }
+        public decimal? TAEM_NbrJoursAn { get; set; }
         [JsonPropertyName("TAEM_NbrJoursSemaine")]
-        public decimal TAEM_NbrJoursSemaine { get; set; }
+        public decimal? TAEM_NbrJoursSemaine { get; set; }
         [JsonPropertyName("TAEM_Heures")]
         public decimal TAEM_Heures { get; set; }
        
