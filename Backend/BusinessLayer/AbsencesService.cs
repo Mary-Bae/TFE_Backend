@@ -24,16 +24,18 @@ namespace BusinessLayer
         }
         public async Task AddAbsence(TypeAbsenceDTO absence, int employeId, decimal jours)
         {
-                if (absence.TAEM_TYPE_id == 2)
+                if (absence.TAEM_TYPE_id == 2) // Télétravail
                 {
                     if (jours > 5)
                         throw new CustomError(ErreurCodeEnum.JoursEnTrop);
                     absence.TAEM_NbrJoursSemaine = jours;
-                }
+                    absence.TAEM_NbrJoursAn = null;
+            }
                 else
                 {
                     absence.TAEM_NbrJoursAn = jours;
-                }
+                    absence.TAEM_NbrJoursSemaine = null;
+            }
 
                 await _absencesRepo.AddAbsence(absence, employeId);
         }
