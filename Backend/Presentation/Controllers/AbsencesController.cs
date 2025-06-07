@@ -97,5 +97,20 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize(Policy = "administrator")]
+        [HttpGet("GetJoursCongesSuggérés")]
+        public async Task<IActionResult> GetJoursCongesSuggérés(int employeId, int typeAbsenceId)
+        {
+            try
+            {
+                var jours = await _absencesService.GetJoursCongesSuggérés(employeId, typeAbsenceId);
+                return Ok(jours);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace CustomErrors
         RoleInconnu,
         TypeJournee,
         HeuresHebdo,
+        AucuneSuggestion,
         ErreurSQL,
         ErreurGenerale
     }
@@ -83,6 +84,9 @@ namespace CustomErrors
                     break;
                 case ErreurCodeEnum.HeuresHebdo:
                     _messageToReturn = "Vous avez dépassé votre quota hebdomadaire autorisé.";
+                    break;
+                case ErreurCodeEnum.AucuneSuggestion:
+                    _messageToReturn = "Aucune suggestion de jours trouvée pour cet employé.";
                     break;
                 case ErreurCodeEnum.ErreurSQL:
                     _messageToReturn = "Erreur liée à la base de données SQL.";

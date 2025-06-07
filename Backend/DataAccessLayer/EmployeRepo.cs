@@ -26,7 +26,6 @@ namespace DataAccessLayer
 
                var eMail =  await _connection.QueryAsync<T>("[shUser].[SelectMailManager]", parameters, commandType: CommandType.StoredProcedure);
                 return eMail.FirstOrDefault();
-
         }
         public async Task<int> GetManagerId(string auth0Id)
         {
@@ -67,7 +66,6 @@ namespace DataAccessLayer
             parameters.Add("@ManagerId", employe.EMP_Manager_id == 0 ? null : employe.EMP_Manager_id);
 
             await _connectAdmin.ExecuteAsync("[shAdmin].[CreateUser]", parameters, commandType: CommandType.StoredProcedure);
-
         }
         public async Task UpdateEmploye(int pId, EmployeDTO employe)
         {
