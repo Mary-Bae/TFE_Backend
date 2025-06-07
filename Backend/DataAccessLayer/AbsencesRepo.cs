@@ -56,6 +56,14 @@ namespace DataAccessLayer
 
             await _connectAdmin.ExecuteAsync("[shAdmin].[DeleteAbsence]", parameters, commandType: CommandType.StoredProcedure);
         }
+        public async Task<T?> GetJoursCongesByContrat<T>(int employeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EMP_id", employeId);
+
+            var resultat = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectJoursCongesParContrat]", parameters, commandType: CommandType.StoredProcedure);
+            return resultat.FirstOrDefault();
+        }
 
     }
 }

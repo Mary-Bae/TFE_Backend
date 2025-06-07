@@ -27,4 +27,9 @@ namespace Models
         [JsonPropertyName("TYPE_Libelle")]
         public string? TYPE_Libelle { get; set; }
     }
+    public class JoursParContratDTO
+    {
+        [JsonPropertyName("JoursSuggérés")]
+        public decimal JoursSuggérés { get; set; }
+    }
 }

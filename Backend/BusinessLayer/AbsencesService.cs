@@ -72,5 +72,31 @@ namespace BusinessLayer
                 throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
         }
+        public async Task<JoursParContratDTO?> GetJoursCongesSuggérés(int employeId, int typeAbsenceId)
+        {
+            // Télétravail (id = 2)
+            if (typeAbsenceId == 2)
+                return new JoursParContratDTO { JoursSuggérés = 3 };
+            // Congé de maternité (id = 4)
+            if (typeAbsenceId == 4)
+                return new JoursParContratDTO { JoursSuggérés = 75 };
+
+            // Congé de paternité (id = 5)
+            if (typeAbsenceId == 5)
+                return new JoursParContratDTO { JoursSuggérés = 20 };
+
+            // Congé légal (ex: ID = 1) => appeler la procédure stockée
+            if (typeAbsenceId == 1)
+            {
+                var result = await _absencesRepo.GetJoursCongesByContrat<JoursParContratDTO>(employeId);
+
+                if (result == null)
+                    throw new CustomError(ErreurCodeEnum.AucuneSuggestion);
+
+                return result;
+            }
+            // Pour les autres types d’absences : pas de suggestion
+            return null;
+        }
     }
 }

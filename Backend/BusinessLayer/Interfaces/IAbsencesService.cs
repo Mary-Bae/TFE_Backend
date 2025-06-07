@@ -14,5 +14,6 @@ namespace Interfaces
         Task AddAbsence(TypeAbsenceDTO absence, int employeId, decimal jours);
         Task UpdAbsence(TypeAbsenceDTO absence, int employeId, decimal jours);
         Task DeleteAbsence(int pId);
+        Task<JoursParContratDTO?> GetJoursCongesSuggérés(int employeId, int typeAbsenceId);
     }
 }
