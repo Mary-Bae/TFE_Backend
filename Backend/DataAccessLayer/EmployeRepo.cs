@@ -65,7 +65,14 @@ namespace DataAccessLayer
             parameters.Add("@RoleId", employe.EMP_ROL_id);
             parameters.Add("@ManagerId", employe.EMP_Manager_id == 0 ? null : employe.EMP_Manager_id);
 
-            await _connectAdmin.ExecuteAsync("[shAdmin].[CreateUser]", parameters, commandType: CommandType.StoredProcedure);
+
+            parameters.Add("@TypeContrat", employe.CON_Type);
+            parameters.Add("@JoursSemaine", employe.CON_JoursSemaine);
+            parameters.Add("@Description", employe.CON_Description);
+            parameters.Add("@DateDebut", employe.CON_DteDebut);
+            parameters.Add("@DateFin", employe.CON_DteFin);
+
+        await _connectAdmin.ExecuteAsync("[shAdmin].[CreateUser]", parameters, commandType: CommandType.StoredProcedure);
         }
         public async Task UpdateEmploye(int pId, EmployeDTO employe)
         {
@@ -78,6 +85,12 @@ namespace DataAccessLayer
             parameters.Add("@EMP_Pren2", employe.EMP_Pren2);
             parameters.Add("@EMP_Sexe", employe.EMP_Sexe);
             parameters.Add("@EMP_Manager_id", employe.EMP_Manager_id);
+
+            parameters.Add("@TypeContrat", employe.CON_Type);
+            parameters.Add("@JoursSemaine", employe.CON_JoursSemaine);
+            parameters.Add("@Description", employe.CON_Description);
+            parameters.Add("@DateDebut", employe.CON_DteDebut);
+            parameters.Add("@DateFin", employe.CON_DteFin);
 
             await _connectAdmin.ExecuteAsync("[shAdmin].[UpdateEmploye]", parameters, commandType: CommandType.StoredProcedure);
         }
