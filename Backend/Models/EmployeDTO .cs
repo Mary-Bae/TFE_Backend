@@ -28,6 +28,21 @@ namespace Models
         public string? EMP_Manager { get; set; }
         [JsonPropertyName("EMP_Manager_id")]
         public int EMP_Manager_id { get; set; }
+
+        [JsonPropertyName("CON_id")]
+        public int? CON_id { get; set; }
+        [JsonPropertyName("CON_Type")]
+        public string? CON_Type { get; set; }
+        [JsonPropertyName("CON_JoursSemaine")]
+        public int? CON_JoursSemaine { get; set; }
+        [JsonPropertyName("CON_Description")]
+        public string? CON_Description { get; set; }
+        [JsonPropertyName("CON_DteDebut")]
+        public DateTime? CON_DteDebut { get; set; }
+        [JsonPropertyName("CON_DteFin")]
+        public DateTime? CON_DteFin { get; set; }
+        [JsonPropertyName("CON_EMP_id")]
+        public int? CON_EMP_id { get; set; }
     }
     public class EmployeNomsDTO
     {

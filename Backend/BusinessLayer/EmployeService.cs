@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using DataAccessLayer;
 using CustomErrors;
 using Microsoft.Data.SqlClient;
+using System.Globalization;
 
 namespace BusinessLayer
 {
@@ -59,6 +60,14 @@ namespace BusinessLayer
         {
             return await _employeRepo.GetManagers<T>();
         }
+
+        private string RemoveAccents(string text)
+        {
+            return string.Concat(
+                text.Normalize(NormalizationForm.FormD)
+                    .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+            );
+        }
         public async Task<EmployeDTO> CreateUser(EmployeDTO employe)
         {
             //Récupération du token de mon API Management dans Auth0 (connecté à Machine-To-Machine)
@@ -66,7 +75,10 @@ namespace BusinessLayer
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
 
-            employe.EMP_Email = (employe.EMP_Nom + "." + employe.EMP_Prenom + "@gmail.com").ToLower();
+            var nomSansAccent = RemoveAccents(employe.EMP_Nom);
+            var prenomSansAccent = RemoveAccents(employe.EMP_Prenom);
+
+            employe.EMP_Email = (nomSansAccent + "." + prenomSansAccent + "@gmail.com").ToLower();
             if (!string.IsNullOrEmpty(employe.EMP_Sexe))
             {
                 employe.EMP_Sexe = employe.EMP_Sexe.Trim().Substring(0, 1).ToUpper();
@@ -145,7 +157,10 @@ namespace BusinessLayer
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
 
-            employe.EMP_Email = (employe.EMP_Nom + "." + employe.EMP_Prenom + "@gmail.com").ToLower();
+            var nomSansAccent = RemoveAccents(employe.EMP_Nom);
+            var prenomSansAccent = RemoveAccents(employe.EMP_Prenom);
+
+            employe.EMP_Email = (nomSansAccent + "." + prenomSansAccent + "@gmail.com").ToLower();
             if (!string.IsNullOrEmpty(employe.EMP_Sexe))
             {
                 employe.EMP_Sexe = employe.EMP_Sexe.Trim().Substring(0, 1).ToUpper();
