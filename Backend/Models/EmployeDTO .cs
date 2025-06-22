@@ -28,6 +28,8 @@ namespace Models
         public string? EMP_Manager { get; set; }
         [JsonPropertyName("EMP_Manager_id")]
         public int EMP_Manager_id { get; set; }
+        [JsonPropertyName("EMP_IsDeleted")]
+        public bool EMP_IsDeleted { get; set; }
 
         [JsonPropertyName("CON_id")]
         public int? CON_id { get; set; }

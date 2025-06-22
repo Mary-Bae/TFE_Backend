@@ -48,6 +48,11 @@ namespace DataAccessLayer
             var users = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectUsers]", commandType: CommandType.StoredProcedure);
             return users.ToList();
         }
+        public async Task<List<T>> GetDeletedUsers<T>()
+        {
+            var users = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectDeletedUsers]", commandType: CommandType.StoredProcedure);
+            return users.ToList();
+        }
         public async Task<List<T>> GetManagers<T>()
         {
             var managers = await _connectAdmin.QueryAsync<T>("[shAdmin].[SelectManagers]", commandType: CommandType.StoredProcedure);
@@ -108,6 +113,13 @@ namespace DataAccessLayer
             parameters.Add("@EMP_id", pId);
 
             await _connectAdmin.ExecuteAsync("[shAdmin].[DeleteEmploye]", parameters, commandType: CommandType.StoredProcedure);
+        }
+        public async Task RestoreEmploye(int pId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EMP_id", pId);
+
+            await _connectAdmin.ExecuteAsync("[shAdmin].[RestoreEmploye]", parameters, commandType: CommandType.StoredProcedure);
         }
     }
 }
