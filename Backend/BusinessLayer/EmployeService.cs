@@ -7,6 +7,7 @@ using DataAccessLayer;
 using CustomErrors;
 using Microsoft.Data.SqlClient;
 using System.Globalization;
+using Azure;
 
 namespace BusinessLayer
 {
@@ -59,6 +60,10 @@ namespace BusinessLayer
         public async Task<List<T>> GetManagers<T>()
         {
             return await _employeRepo.GetManagers<T>();
+        }
+        public async Task<List<T>> GetDeletedUsers<T>()
+        {
+            return await _employeRepo.GetDeletedUsers<T>();
         }
 
         private string RemoveAccents(string text)
@@ -230,14 +235,19 @@ namespace BusinessLayer
                 var employe = await _employeRepo.GetEmployeById<EmployeDTO>(pId);
                 if (!string.IsNullOrEmpty(employe?.EMP_Auth))
                 {
-                    // Supprimer dans Auth0
+                    // Bloquer l'utilisateur dans Auth0 (au lieu de le supprimer)
                     var bearerToken = await _authService.GetManagementApiToken();
                     using var client = new HttpClient();
                     client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
 
-                    var response = await client.DeleteAsync(
-                        $"https://dev-r0omvlrob02srgfr.us.auth0.com/api/v2/users/{employe.EMP_Auth}"
+                    var payload = new { blocked = true };
+                    var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PatchAsync(
+                        $"https://dev-r0omvlrob02srgfr.us.auth0.com/api/v2/users/{employe.EMP_Auth}",
+                        content
                     );
+
                     if (!response.IsSuccessStatusCode)
                     {
                         throw new CustomError(ErreurCodeEnum.SuppressionAuth0Echouée);
@@ -257,6 +267,45 @@ namespace BusinessLayer
             {
                 throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
             }
+        }
+
+        public async Task RestoreEmploye(int pId)
+        {
+            try
+            {
+                var employe = await _employeRepo.GetEmployeById<EmployeDTO>(pId);
+                if (!string.IsNullOrEmpty(employe?.EMP_Auth))
+                {
+                    var bearerToken = await _authService.GetManagementApiToken();
+                    using var client = new HttpClient();
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer " + bearerToken);
+
+                    var payload = new { blocked = false };
+                    var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PatchAsync(
+                        $"https://dev-r0omvlrob02srgfr.us.auth0.com/api/v2/users/{employe.EMP_Auth}",
+                        content
+                    );
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new CustomError(ErreurCodeEnum.RestaurationAuth0Echouée);
+                    }
+                }
+
+                await _employeRepo.RestoreEmploye(pId);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.StartsWith("[EMP02]"))
+                    throw new CustomError(ErreurCodeEnum.RestaurationEchouée, ex);
+                throw new CustomError(ErreurCodeEnum.ErreurSQL, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomError(ErreurCodeEnum.ErreurGenerale, ex);
+            }
+
         }
     }
 }

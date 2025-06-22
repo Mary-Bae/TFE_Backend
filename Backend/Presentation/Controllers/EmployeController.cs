@@ -75,6 +75,24 @@ namespace Presentation.Controllers
             }
         }
         [Authorize(Policy = "administrator")]
+        [HttpGet("GetDeletedUsers")]
+        public async Task<IActionResult> GetDeletedUsers()
+        {
+            try
+            {
+                var users = await _employeService.GetDeletedUsers<EmployeDTO>();
+                return Ok(users);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize(Policy = "administrator")]
         [HttpGet("GetManagers")]
         public async Task<IActionResult> GetManagers()
         {
@@ -142,7 +160,7 @@ namespace Presentation.Controllers
             }
         }
         [Authorize(Policy = "administrator")]
-        [HttpDelete("DelEmploye")]
+        [HttpPut("DelEmploye")]
         public async Task<IActionResult> DeleteEmploye(int id)
         {
             try
@@ -156,6 +174,22 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
-      
+
+        [Authorize(Policy = "administrator")]
+        [HttpPut("RestoreEmploye")]
+        public async Task<IActionResult> RestaureEmploye(int id)
+        {
+            try
+            {
+                await _employeService.RestoreEmploye(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

@@ -13,7 +13,9 @@ namespace CustomErrors
         ModifierDemEnAttente,
         SuperieurInexistant,
         SuppressionEchouée,
+        RestaurationEchouée,
         SuppressionAuth0Echouée,
+        RestaurationAuth0Echouée,
         SexeInvalide,
         RoleInconnu,
         TypeJournee,
@@ -68,10 +70,17 @@ namespace CustomErrors
                     _messageToReturn = "Aucun supérieur trouvé pour cet employé.";
                     break;
                 case ErreurCodeEnum.SuppressionEchouée:
-                    _messageToReturn = "La suppression de l''employé a échoué. Vérifiez les enregistrements liés (demandes, absences ou contrats).";
+                    _messageToReturn = "La suppression de l''employé a échoué.";
                     break;
+                case ErreurCodeEnum.RestaurationEchouée:
+                    _messageToReturn = "La restauration de l'employé a échoué.";
+                    break;
+                    
                 case ErreurCodeEnum.SuppressionAuth0Echouée:
                     _messageToReturn = "La suppression de l''employé a échoué. Vérifiez l'interface Auth0.";
+                    break;
+                case ErreurCodeEnum.RestaurationAuth0Echouée:
+                    _messageToReturn = "La restauration de l''employé a échoué. Vérifiez l'interface Auth0.";
                     break;
                 case ErreurCodeEnum.SexeInvalide:
                     _messageToReturn = "Sexe invalide : doit être F (Féminin) ou M (Masculin).";
