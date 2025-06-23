@@ -27,6 +27,14 @@ namespace DataAccessLayer
                var eMail =  await _connection.QueryAsync<T>("[shUser].[SelectMailManager]", parameters, commandType: CommandType.StoredProcedure);
                 return eMail.FirstOrDefault();
         }
+        public async Task<T?> GetUserByAuth<T>(string auth0Id)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Auth0Id", auth0Id);
+
+            var user = await _connection.QueryAsync<T>("[shUser].[SelectUserByAuth]", parameters, commandType: CommandType.StoredProcedure);
+            return user.FirstOrDefault();
+        }
         public async Task<int> GetManagerId(string auth0Id)
         {
             var parameters = new DynamicParameters();
@@ -69,6 +77,7 @@ namespace DataAccessLayer
             parameters.Add("@Auth0Id", employe.EMP_Auth);
             parameters.Add("@RoleId", employe.EMP_ROL_id);
             parameters.Add("@ManagerId", employe.EMP_Manager_id == 0 ? null : employe.EMP_Manager_id);
+            parameters.Add("@ModifiedBy", employe.EMP_ModifiedBy);
 
 
             parameters.Add("@TypeContrat", employe.CON_Type);
@@ -90,6 +99,7 @@ namespace DataAccessLayer
             parameters.Add("@EMP_Pren2", employe.EMP_Pren2);
             parameters.Add("@EMP_Sexe", employe.EMP_Sexe);
             parameters.Add("@EMP_Manager_id", employe.EMP_Manager_id);
+            parameters.Add("@ModifiedBy", employe.EMP_ModifiedBy);
 
             parameters.Add("@TypeContrat", employe.CON_Type);
             parameters.Add("@JoursSemaine", employe.CON_JoursSemaine);
@@ -107,17 +117,19 @@ namespace DataAccessLayer
             var employe = await _connectAdmin.QuerySingleOrDefaultAsync<T>("[shAdmin].[SelectEmployeById]", parameters, commandType: CommandType.StoredProcedure);
             return employe;
         }
-        public async Task DeleteEmploye(int pId)
+        public async Task DeleteEmploye(int pId, int? modifiedBy)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@EMP_id", pId);
+            parameters.Add("@EMP_ModifiedBy", modifiedBy);
 
             await _connectAdmin.ExecuteAsync("[shAdmin].[DeleteEmploye]", parameters, commandType: CommandType.StoredProcedure);
         }
-        public async Task RestoreEmploye(int pId)
+        public async Task RestoreEmploye(int pId, int? modifiedBy)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@EMP_id", pId);
+            parameters.Add("@EMP_ModifiedBy", modifiedBy);
 
             await _connectAdmin.ExecuteAsync("[shAdmin].[RestoreEmploye]", parameters, commandType: CommandType.StoredProcedure);
         }

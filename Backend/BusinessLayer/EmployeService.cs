@@ -38,6 +38,10 @@ namespace BusinessLayer
             }
 
         }
+        public async Task<T?> GetUserByAuth<T>(string auth0Id)
+        {
+            return await _employeRepo.GetUserByAuth<T>(auth0Id);
+        }
         public async Task<T?> GetMailByDemande<T>(int demId)
         {
             try
@@ -227,7 +231,7 @@ namespace BusinessLayer
         {
             return await _employeRepo.GetEmployeById<T>(employeId);
         }
-        public async Task DeleteEmploye(int pId)
+        public async Task DeleteEmploye(int pId, int? modifiedBy)
         {
             try
             {
@@ -255,7 +259,7 @@ namespace BusinessLayer
                 }
 
                 // Supprimer dans SQL
-                await _employeRepo.DeleteEmploye(pId);
+                await _employeRepo.DeleteEmploye(pId, modifiedBy);
             }
             catch (SqlException ex)
             {
@@ -269,7 +273,7 @@ namespace BusinessLayer
             }
         }
 
-        public async Task RestoreEmploye(int pId)
+        public async Task RestoreEmploye(int pId, int? modifiedBy)
         {
             try
             {
@@ -293,7 +297,7 @@ namespace BusinessLayer
                     }
                 }
 
-                await _employeRepo.RestoreEmploye(pId);
+                await _employeRepo.RestoreEmploye(pId, modifiedBy);
             }
             catch (SqlException ex)
             {
