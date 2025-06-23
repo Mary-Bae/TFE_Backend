@@ -30,7 +30,9 @@ namespace Models
         public int EMP_Manager_id { get; set; }
         [JsonPropertyName("EMP_IsDeleted")]
         public bool EMP_IsDeleted { get; set; }
-
+        [JsonPropertyName("EMP_ModifiedBy")]
+        public int? EMP_ModifiedBy { get; set; }
+        
         [JsonPropertyName("CON_id")]
         public int? CON_id { get; set; }
         [JsonPropertyName("CON_Type")]

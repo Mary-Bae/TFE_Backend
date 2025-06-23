@@ -13,8 +13,9 @@ namespace Interfaces
         Task CreateUser(EmployeDTO employe);
         Task UpdateEmploye(int pId, EmployeDTO employe);
         Task<T?> GetEmployeById<T>(int employeId);
-        Task DeleteEmploye(int pId);
-        Task RestoreEmploye(int pId);
+        Task DeleteEmploye(int pId, int? modifiedBy);
+        Task RestoreEmploye(int pId, int? modifiedBy);
+        Task<T?> GetUserByAuth<T>(string auth0Id);
 
     }
 }

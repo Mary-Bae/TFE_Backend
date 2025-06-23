@@ -112,6 +112,10 @@ namespace Presentation.Controllers
         {
             try
             {
+                var auth0Id = _authService.GetUserAuth0Id(User);
+                var user = await _employeService.GetUserByAuth<EmployeDTO>(auth0Id);
+                var empId = user?.EMP_id;
+                employe.EMP_ModifiedBy = empId;
                 var bearerToken = Request.Headers["Authorization"].ToString();
                 var createdUser = await _employeService.CreateUser(employe);
                 return Ok(createdUser);
@@ -127,6 +131,10 @@ namespace Presentation.Controllers
         {
             try
             {
+                var auth0Id = _authService.GetUserAuth0Id(User);
+                var user = await _employeService.GetUserByAuth<EmployeDTO>(auth0Id);
+                var empId = user?.EMP_id;
+                employe.EMP_ModifiedBy = empId;
                 var bearerToken = Request.Headers["Authorization"].ToString();
                 var employeUpdated = await _employeService.UpdateEmploye(id, employe);
                 return Ok(employeUpdated);
@@ -165,7 +173,11 @@ namespace Presentation.Controllers
         {
             try
             {
-                await _employeService.DeleteEmploye(id);
+                var auth0Id = _authService.GetUserAuth0Id(User);
+                var user = await _employeService.GetUserByAuth<EmployeDTO>(auth0Id);
+                var empId = user?.EMP_id;
+
+                await _employeService.DeleteEmploye(id, empId);
 
                 return Ok();
             }
@@ -177,11 +189,15 @@ namespace Presentation.Controllers
 
         [Authorize(Policy = "administrator")]
         [HttpPut("RestoreEmploye")]
-        public async Task<IActionResult> RestaureEmploye(int id)
+        public async Task<IActionResult> RestoreEmploye(int id)
         {
             try
             {
-                await _employeService.RestoreEmploye(id);
+                var auth0Id = _authService.GetUserAuth0Id(User);
+                var user = await _employeService.GetUserByAuth<EmployeDTO>(auth0Id);
+                var empId = user?.EMP_id;
+
+                await _employeService.RestoreEmploye(id, empId);
 
                 return Ok();
             }
